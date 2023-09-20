@@ -1,6 +1,9 @@
 const jsdom = require("/Library/Frameworks/Python.framework/Versions/3.9/node_modules/jsdom");
-// const cookieJar = new jsdom.CookieJar(store, options);
+const fs = require('fs')
+// const data = fs.readFileSync('/Users/breeze/PycharmProjects/12306/test/initDc.html', 'utf8')
+// const data = fs.readFileSync('initDc.html', 'utf8')
 const { JSDOM } = jsdom;
+// const dom = new JSDOM(data);
 const dom = new JSDOM(`
 <!DOCTYPE html>
 <body>
@@ -198,6 +201,7 @@ function acMain() {
             }
     }
     function k(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -243,6 +247,7 @@ function acMain() {
             case 10:
                 c[964] = c[964].concat(c[919]),
                 e = 11;
+                // console.log('k(' + i + ') 919 - 10')
                 break;
             case 11:
                 c[915] = 20 < c[9] ? 20 : c[9],
@@ -255,12 +260,15 @@ function acMain() {
             case 13:
                 c[964] = c[964].concat(c[919]),
                 e = 14;
+                // console.log('k(' + i + ') 919 - 13')
                 break;
             case 14:
                 c[981] = c[9],
                 e = 15;
+                // console.log('k(' + i + ') c[981] = c[9] = ' + c[9])
                 break;
             case 15:
+                // console.log('k(' + i + ') c[981] = ' + c[981]);
                 if (0 < c[981] && c[981] + 20 > c[9]) {
                     e = 16;
                     break
@@ -619,7 +627,7 @@ function acMain() {
         for (; -1 < e; )
             switch (e) {
             case 0:
-                c[1589] = window[c[1578] + c[1584]].toString,//json_ua函数
+                c[1589] = window[c[1578] + c[1584]].toString,
                 e = 1;
                 break;
             case 1:
@@ -634,12 +642,9 @@ function acMain() {
                 break;
             case 3:
                 try {
-                    // console.log(c[1589])
-                    c[1589] = c[1589].caller// 调用处的函数名
-                    // console.log('caller = ' + c[1589])
+                    c[1589] = c[1589].caller
                 } catch ($ex) {
                     c[1578] = $ex
-                    // console.log('exception')
                 }
                 e = 4;
                 break;
@@ -796,6 +801,7 @@ function acMain() {
             }
     }
     function d(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -861,6 +867,7 @@ function acMain() {
             case 15:
                 c[2]++,
                 e = 16;
+                // console.log('d(' + i + ') c[2] = ' + c[2])
                 break;
             case 16:
                 c[1373] = 31 & c[2],
@@ -933,8 +940,8 @@ function acMain() {
                 return void a.i(bc, 2);
             case 13:
                 c[1598] = (new Date).getTime(),
-                // c[1598] = 1695020963917,
                 e = 14;
+                // console.log('c1598 = getTime() = ' + c[1598])
                 break;
             case 14:
                 if (null == c[1]) {
@@ -958,6 +965,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('c1599 = c1598 = ' + c[1598])
                 return c[1599] = c[1598],
                 void a.i(bc, 0)
             }
@@ -1567,6 +1575,7 @@ function acMain() {
             }
     }
     function C(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -1620,6 +1629,7 @@ function acMain() {
             case 12:
                 c[964] = c[964].concat(c[919]),
                 e = 13;
+                // console.log('C(' + i + ') 919 - 12')
                 break;
             case 13:
                 c[982] = "",
@@ -2597,9 +2607,23 @@ function acMain() {
                 window[c[1720]] = new String,
                 e = 5;
                 break;
-                case 5:
+            case 5:
+                a = 100;
                 window.json_ua.toString = function() {
                 // window[c[1708]].toString = function() {
+                    // console.log('encry call start c[4] = ' + c[4])
+                    let event = document.createEvent('MouseEvents');
+                    event.initEvent('mousemove', true, true);
+                    event.view = window;
+                    for (let i = 0; i < 25; i++) {
+                        c[1278] = event
+                        be(ue, 6).r()
+                    }
+                    for (let i = 0; i < 8; i++) {
+                        be(Pe, 8).r()
+                        c[1367] = event
+                        be(Te, 5).r()
+                    }
                     return c[1721] = "",
                     c[1721] = c[1721].split(""),
                     c[1721] = c[1721].reverse(),
@@ -2957,6 +2981,7 @@ function acMain() {
             }
     }
     function R(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -2992,10 +3017,12 @@ function acMain() {
             case 7:
                 c[964] = c[964].concat(c[934]),
                 e = 8;
+                // console.log('R(' + i + ') 934 - 7')
                 break;
             case 8:
                 c[974] = r[72],
                 e = 9;
+                // console.log(' R(' + i + ') 974 = ' + c[974].length)
                 break;
             case 9:
                 c[975] = 199,
@@ -3040,6 +3067,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('R(' + i + ') 934-19')
                 return c[964] = c[964].concat(c[934]),
                 void a.i(jc, 0)
             }
@@ -3469,6 +3497,7 @@ function acMain() {
             }
     }
     function V(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -3517,11 +3546,13 @@ function acMain() {
                 break;
             case 11:
                 c[1617] = function(e) {
+                    // console.log('c[1617] in V(11) call Te');
                     c[1367] = e,
                     be(Te, 5).r()
                 }
                 ,
                 e = 12;
+                // console.log('V(' + i + ') 11 init 17');
                 break;
             case 12:
                 be(w, 15).r(),
@@ -3533,11 +3564,13 @@ function acMain() {
                 break;
             case 14:
                 c[1617] = function(e) {
+                    // console.log('c[1617] in V(14) call Te');
                     c[1367] = e,
                     be(Te, 5).r()
                 }
                 ,
                 e = 15;
+                // console.log('V(' + i + ') 14 init 17');
                 break;
             case 15:
                 be(w, 15).r(),
@@ -3554,6 +3587,7 @@ function acMain() {
                 }
                 ,
                 e = 18;
+                // console.log('V(' + i + ') 17 init 17')
                 break;
             case 18:
                 be(w, 15).r(),
@@ -3565,6 +3599,7 @@ function acMain() {
             }
     }
     function W(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -3600,10 +3635,12 @@ function acMain() {
             case 7:
                 c[964] = c[964].concat(c[934]),
                 e = 8;
+                // console.log('W(' + i + ') 934 - 7')
                 break;
             case 8:
                 c[974] = r[416],
                 e = 9;
+                // console.log(' W(' + i + ') 974 = ' + c[974].length)
                 break;
             case 9:
                 c[975] = 90,
@@ -3648,6 +3685,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('W(' + i + ') 934 - 19')
                 return c[964] = c[964].concat(c[934]),
                 void a.i(la, 0)
             }
@@ -4075,6 +4113,7 @@ function acMain() {
             }
     }
     function Z(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -4096,6 +4135,7 @@ function acMain() {
             case 4:
                 c[964] = c[964].concat(c[919]),
                 e = 5;
+                // console.log('Z(' + i + ') 919 - 4')
                 break;
             case 5:
                 c[963] = 14 ^ r[348][5],
@@ -4159,6 +4199,7 @@ function acMain() {
             }
     }
     function Q(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -4194,10 +4235,12 @@ function acMain() {
             case 7:
                 c[964] = c[964].concat(c[934]),
                 e = 8;
+                // console.log('Q(' + i + ') 934 - 7')
                 break;
             case 8:
                 c[974] = r[13],
                 e = 9;
+                // console.log(' Q(' + i + ') 974 = ' + c[974].length)
                 break;
             case 9:
                 c[975] = 203,
@@ -4491,6 +4534,7 @@ function acMain() {
             }
     }
     function ce(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -4504,6 +4548,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[934]),
                 e = 3;
+                // console.log('ce(' + i + ') 934 - 2')
                 break;
             case 3:
                 c[1009] = 19,
@@ -4575,6 +4620,7 @@ function acMain() {
             }
     }
     function se(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -4588,10 +4634,12 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[934]),
                 e = 3;
+                // console.log('se(' + i + ') 934 - 2')
                 break;
             case 3:
                 c[974] = r[340],
                 e = 4;
+                // console.log(' se(' + i + ') 974 = ' + c[974].length)
                 break;
             case 4:
                 c[975] = 6,
@@ -4638,10 +4686,12 @@ function acMain() {
             case 14:
                 c[964] = c[964].concat(c[934]),
                 e = 15;
+                // console.log('se(' + i + ') 934 - 14')
                 break;
             case 15:
                 c[964] = c[964].concat([8192 & r[341] ? 3 : 2]),
                 e = 16;
+                // console.log('se(' + i + ') - 15')
                 break;
             case 16:
                 c[915] = 531556703 ^ r[342],
@@ -4654,6 +4704,7 @@ function acMain() {
             case 18:
                 c[964] = c[964].concat(c[919]),
                 e = 19;
+                // console.log('se(' + i + ') 919 - 18')
                 break;
             case 19:
                 return c[915] = 4,
@@ -4668,7 +4719,6 @@ function acMain() {
                     var e = r.j;
                     r.j = null;
                     try {
-                        // console.log(e[0].name)
                         e[0].apply(null, [e[1], r])
                     } catch ($ex) {}
                 }
@@ -5162,14 +5212,17 @@ function acMain() {
             case 14:
                 c[1279] = c[1308],
                 e = 15;
+                // console.log('c[1279] = c1308 = ' + c[1279])
                 break;
             case 15:
                 c[1278] = c[1279][0],
                 e = 16;
+                // console.log('c1278 = c[1279][1] = ' + c[1278])
                 break;
             case 16:
                 c[1280] = c[1279][1],
                 e = 17;
+                // console.log('c1280 = c[1279][1] = ' + c[1280])
                 break;
             case 17:
                 be(v, 13).r(),
@@ -5178,8 +5231,10 @@ function acMain() {
             case 18:
                 c[1279] = c[1599],
                 e = 19;
+                // console.log('c[1279] = c1599 = ' + c[1279])
                 break;
             case 19:
+                // console.log('c[1280] = ' + c[1278] + ', c[6] = ' + c[6])
                 return c[1281] = c[1278] - c[6],
                 void a.i(ms, 0)
             }
@@ -5610,11 +5665,13 @@ function acMain() {
             }
     }
     function le(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[4]++,
                 e = 1;
+                // console.log('le(' + i + ') c[4]++ = ' + c[4])
                 break;
             case 1:
                 c[1318] = "",
@@ -5949,6 +6006,7 @@ function acMain() {
             }
     }
     function je(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -5966,6 +6024,7 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[919]),
                 e = 4;
+                // console.log('je(' + i + ') 919 - 3')
                 break;
             case 4:
                 c[973] = "",
@@ -5986,6 +6045,7 @@ function acMain() {
             case 8:
                 c[974] = 1013 ^ r[1][3],
                 e = 9;
+                // console.log(' je(' + i + ') 974 = ' + c[974].length)
                 break;
             case 9:
                 c[975] = c[974] << 22,
@@ -5994,6 +6054,7 @@ function acMain() {
             case 10:
                 c[974] = 22934 ^ r[1][2],
                 e = 11;
+                // console.log(' je(' + i + ') 974 = ' + c[974].length)
                 break;
             case 11:
                 c[976] = c[974] << 7,
@@ -6002,6 +6063,7 @@ function acMain() {
             case 12:
                 c[974] = 8 ^ r[1][1],
                 e = 13;
+                // console.log(' je(' + i + ') 974 = ' + c[974].length)
                 break;
             case 13:
                 c[977] = c[974] << 1,
@@ -6010,6 +6072,7 @@ function acMain() {
             case 14:
                 c[974] = 1 ^ r[1][0],
                 e = 15;
+                // console.log(' je(' + i + ') 974 = ' + c[974].length)
                 break;
             case 15:
                 c[978] = c[974] << 0,
@@ -6018,6 +6081,7 @@ function acMain() {
             case 16:
                 c[974] = c[977] | c[978],
                 e = 17;
+                // console.log(' je(' + i + ') 974 = ' + c[974].length)
                 break;
             case 17:
                 c[977] = c[976] | c[974],
@@ -6033,6 +6097,7 @@ function acMain() {
             }
     }
     function Ce(e, a) {
+        let i = e
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -6046,6 +6111,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[919]),
                 e = 3;
+                // console.log('Ce(' + i + ') 919 - 2')
                 break;
             case 3:
                 c[980] = 116 ^ r[11][3],
@@ -6054,6 +6120,7 @@ function acMain() {
             case 4:
                 c[981] = c[980] << 25,
                 e = 5;
+                // console.log('Ce(' + i + ') c[981] = c[980] << 25 = ' + c[980])
                 break;
             case 5:
                 c[980] = 14528 ^ r[11][2],
@@ -6098,10 +6165,12 @@ function acMain() {
             case 15:
                 c[964] = c[964].concat(c[919]),
                 e = 16;
+                // console.log('Ce(' + i + ') 919 - 15')
                 break;
             case 16:
                 c[974] = r[12],
                 e = 17;
+                // console.log(' Ce(' + i + ') 974 = ' + c[974].length)
                 break;
             case 17:
                 c[975] = 91,
@@ -6367,6 +6436,7 @@ function acMain() {
             }
     }
     function $e(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -6376,6 +6446,7 @@ function acMain() {
             case 1:
                 c[964] = c[964].concat(c[919]),
                 e = 2;
+                // console.log('$e(' + i + ') 919 - 1')
                 break;
             case 2:
                 c[971] = 1048575 & r[40],
@@ -6404,6 +6475,7 @@ function acMain() {
             case 8:
                 c[964] = c[964].concat(c[919]),
                 e = 9;
+                // console.log('$e(' + i + ') 919 - 8')
                 break;
             case 9:
                 c[971] = "",
@@ -6436,6 +6508,7 @@ function acMain() {
             case 16:
                 c[964] = c[964].concat(c[919]),
                 e = 17;
+                // console.log('$e(' + i + ') 919 - 16')
                 break;
             case 17:
                 c[978] = 4194303 & r[42],
@@ -6702,6 +6775,7 @@ function acMain() {
             }
     }
     function Be(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -6715,10 +6789,12 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[934]),
                 e = 3;
+                // console.log('Be(' + i + ') 934 - 2')
                 break;
             case 3:
                 c[974] = r[38],
                 e = 4;
+                // console.log(' Be(' + i + ') 974 = ' + c[974].length)
                 break;
             case 4:
                 c[975] = 177,
@@ -6781,6 +6857,7 @@ function acMain() {
             case 18:
                 c[964] = c[964].concat(c[934]),
                 e = 19;
+                // console.log('Be(' + i + ') 934 - 18')
                 break;
             case 19:
                 return c[915] = 1748936098 ^ r[39],
@@ -6876,6 +6953,7 @@ function acMain() {
             case 0:
                 c[964] = c[964].concat([512 & r[46] ? 3 : 2]),
                 e = 1;
+                // console.log('xe(' + 0 + ')')
                 break;
             case 1:
                 c[964] = c[964].concat([512 & r[47] ? 3 : 2]),
@@ -6955,11 +7033,13 @@ function acMain() {
             }
     }
     function Oe(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[974] = r[45],
                 e = 1;
+                // console.log(' Oe(' + i + ') 974 = ' + c[974].length)
                 break;
             case 1:
                 c[975] = 89,
@@ -7011,6 +7091,7 @@ function acMain() {
                 c[964] = c[964].concat(c[934]),
                 e = 13;
                 break;
+                // console.log('Oe(' + i + ') 934 - 12')
             case 13:
                 c[969] = "",
                 e = 14;
@@ -7036,11 +7117,13 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('Oe(' + i + ') 919 - 19')
                 return c[964] = c[964].concat(c[919]),
                 void a.i(xe, 0)
             }
     }
     function Ie(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -7058,6 +7141,7 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[919]),
                 e = 4;
+                // console.log('Ie(' + i + ') 919 - 3')
                 break;
             case 4:
                 c[964] = c[964].concat([8 & r[43] ? 3 : 2]),
@@ -7078,6 +7162,7 @@ function acMain() {
             case 8:
                 c[974] = r[44],
                 e = 9;
+                // console.log(' Ie(' + i + ') 974 = ' + c[974].length)
                 break;
             case 9:
                 c[975] = 89,
@@ -7802,6 +7887,7 @@ function acMain() {
             }
     }
     function Ge(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -7835,6 +7921,7 @@ function acMain() {
             case 7:
                 c[964] = c[964].concat(c[919]),
                 e = 8;
+                // console.log('Ge(' + i + ') 934 - 12')
                 break;
             case 8:
                 c[915] = 3622019043 ^ r[421],
@@ -8384,6 +8471,7 @@ function acMain() {
             }
     }
     function Ye(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -8400,6 +8488,7 @@ function acMain() {
             case 2:
                 c[1634].addEventListener(c[1621], c[1617], !0),
                 e = 3;
+                // console.log('Ye(' + i + ') 2 c[1634].addEventListener ' + c[1621]);
                 break;
             case 3:
                 e = 9;
@@ -8414,6 +8503,7 @@ function acMain() {
             case 5:
                 c[1634].addEventListener(c[1618] + c[1619], c[1617], !0),
                 e = 6;
+                // console.log('Ye(' + i + ') 5 c[1634].addEventListener ' + (c[1618] + c[1619]))
                 break;
             case 6:
                 e = 8;
@@ -8421,6 +8511,7 @@ function acMain() {
             case 7:
                 c[1634].addEventListener(c[1616], c[1617], !0),
                 e = 8;
+                // console.log('Ye(' + i + ') 7 c[1634].addEventListener ' + c[1616])
                 break;
             case 8:
                 e = 9;
@@ -8549,11 +8640,13 @@ function acMain() {
             }
     }
     function Ze(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[964] = c[964].concat(c[934]),
                 e = 1;
+                // console.log('Ze(' + i + ') 934 - 0')
                 break;
             case 1:
                 c[1005] = 19,
@@ -8600,6 +8693,7 @@ function acMain() {
             case 12:
                 c[974] = r[260],
                 e = 13;
+                // console.log(' Ze(' + i + ') 974 = ' + c[974].length)
                 break;
             case 13:
                 c[975] = 108,
@@ -9049,6 +9143,7 @@ function acMain() {
             }
     }
     function sa(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -9072,6 +9167,7 @@ function acMain() {
             case 5:
                 c[964] = c[964].concat(c[934]),
                 e = 6;
+                // console.log('sa(' + i + ') 934 - 5')
                 break;
             case 6:
                 c[987] = 19,
@@ -9131,6 +9227,7 @@ function acMain() {
             }
     }
     function ba(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -9170,6 +9267,7 @@ function acMain() {
             case 9:
                 c[964] = c[964].concat(c[919]),
                 e = 10;
+                // console.log('ba(' + i + ') 919 - 9')
                 break;
             case 10:
                 c[969] = 268435455 & r[155],
@@ -9630,6 +9728,7 @@ function acMain() {
             }
     }
     function ua(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -9679,6 +9778,7 @@ function acMain() {
             case 11:
                 c[964] = c[964].concat(c[919]),
                 e = 12;
+                // console.log('ua(' + i + ') 919 - 11')
                 break;
             case 12:
                 c[915] = 619186747 ^ r[352],
@@ -9714,6 +9814,7 @@ function acMain() {
             }
     }
     function fa(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -9724,6 +9825,7 @@ function acMain() {
                 c[964] = c[964].concat(c[919]),
                 e = 2;
                 break;
+                // console.log('fa(' + i + ') 919 - 1')
             case 2:
                 c[915] = 20 < c[2] ? 20 : c[2],
                 e = 3;
@@ -9739,6 +9841,7 @@ function acMain() {
             case 5:
                 c[981] = c[2],
                 e = 6;
+                // console.log('fa(' + i + ') c[981] = c[2] = ' + c[2])
                 break;
             case 6:
                 if (0 < c[981] && c[981] + 20 > c[2]) {
@@ -9773,6 +9876,7 @@ function acMain() {
             case 13:
                 c[974] = r[c[973]],
                 e = 14;
+                // console.log(' fa(' + i + ') 974 = ' + c[974].length)
                 break;
             case 14:
                 c[975] = 85,
@@ -9886,6 +9990,7 @@ function acMain() {
             }
     }
     function va(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -9895,6 +10000,7 @@ function acMain() {
                 }
                 ,
                 e = 1;
+                // console.log('va(' + i + ')  0 init')
                 break;
             case 1:
                 be(w, 15).r(),
@@ -9911,6 +10017,7 @@ function acMain() {
                 }
                 ,
                 e = 4;
+                // console.log('va(' + i + ')  3 init')
                 break;
             case 4:
                 be(w, 15).r(),
@@ -9927,6 +10034,7 @@ function acMain() {
                 }
                 ,
                 e = 7;
+                // console.log('va(' + i + ')  6 init')
                 break;
             case 7:
                 be(w, 15).r(),
@@ -9943,6 +10051,7 @@ function acMain() {
                 }
                 ,
                 e = 10;
+                // console.log('va(' + i + ')  9 init')
                 break;
             case 10:
                 be(w, 15).r(),
@@ -9959,6 +10068,7 @@ function acMain() {
                 }
                 ,
                 e = 13;
+                // console.log('va(' + i + ')  12 init')
                 break;
             case 13:
                 be(w, 15).r(),
@@ -9970,6 +10080,7 @@ function acMain() {
                 break;
             case 15:
                 c[1617] = function(e) {
+                    // console.log('c[1617] in va(15) call ue 6');
                     c[1278] = e,
                     be(ue, 6).r()
                 }
@@ -9986,6 +10097,7 @@ function acMain() {
                 break;
             case 18:
                 c[1617] = function(e) {
+                    // console.log('c[1617] in va(18) call ue 6');
                     c[1278] = e,
                     be(ue, 6).r()
                 }
@@ -10165,6 +10277,7 @@ function acMain() {
             }
     }
     function la(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -10234,6 +10347,7 @@ function acMain() {
             case 16:
                 c[964] = c[964].concat(c[919]),
                 e = 17;
+                // console.log('la(' + i + ') 919 - 16')
                 break;
             case 17:
                 c[963] = 11 ^ r[418][4],
@@ -10415,6 +10529,7 @@ function acMain() {
             }
     }
     function ma(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -10435,6 +10550,7 @@ function acMain() {
             case 4:
                 c[964] = c[964].concat(c[934]),
                 e = 5;
+                // console.log('ma(' + i + ') 934 - 4')
                 break;
             case 5:
                 c[980] = 19,
@@ -10463,6 +10579,7 @@ function acMain() {
             case 11:
                 c[974] = r[c[986]],
                 e = 12;
+                // console.log(' ma(' + i + ') 974 = ' + c[974].length)
                 break;
             case 12:
                 c[975] = 241,
@@ -10500,12 +10617,13 @@ function acMain() {
             }
     }
     function ja(e, a) {
+        let k = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[47] = c[964],
                 e = 1;
-                // console.log(c[47])
+                // console.log('ja(' + k + ') 47 - 0 --- ' + c[47].length);
                 break;
             case 1:
                 be(i, 2).r(),
@@ -10514,10 +10632,13 @@ function acMain() {
             case 2:
                 c[964] = c[66],
                 e = 3;
+                // console.log('ja(' + k + ') 66 - 2 --- ' + c[964].length);
                 break;
             case 3:
                 c[1062] = c[964],
                 e = 4;
+                // console.log('ja(' + k + ') 66 - 2 --- ' + c[964].length);
+                console.log(c[1062])
                 break;
             case 4:
             case 5:
@@ -10663,6 +10784,7 @@ function acMain() {
             }
     }
     function Sa(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -10683,6 +10805,7 @@ function acMain() {
             case 4:
                 c[964] = c[964].concat(c[934]),
                 e = 5;
+                // console.log('Sa(' + i + ') 934 - 4')
                 break;
             case 5:
                 c[987] = 19,
@@ -10719,6 +10842,7 @@ function acMain() {
             case 13:
                 c[964] = c[964].concat(c[919]),
                 e = 14;
+                // console.log('Sa(' + i + ') 919 - 13')
                 break;
             case 14:
                 c[993] = 19,
@@ -11659,6 +11783,7 @@ function acMain() {
             }
     }
     function Pa(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -11738,6 +11863,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('Pa(' + i + ') 919 - 19')
                 return c[964] = c[964].concat(c[919]),
                 void a.i(ba, 0)
             }
@@ -12577,6 +12703,7 @@ function acMain() {
             }
     }
     function Wa(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -12596,6 +12723,7 @@ function acMain() {
             case 5:
                 c[963] = "",
                 e = 6;
+                // console.log('Wa(5)')
                 break;
             case 6:
                 c[963] = c[963].split(""),
@@ -12620,6 +12748,7 @@ function acMain() {
             case 11:
                 c[964] = [],
                 e = 12;
+                // console.log('Wa(' + i + ') = [] - 11')
                 break;
             case 12:
                 c[965] = "",
@@ -12639,19 +12768,15 @@ function acMain() {
                 break;
             case 16:
                 c[964].push(256 | parseInt(256 * Math.random())),
-                // c[964].push(384)
                 e = 17;
-                // console.log(c[964])
                 break;
             case 17:
                 be(He, 18).r(),
                 e = 18;
-                // console.log(c[964])
                 break;
             case 18:
                 be(Us, 5).r(),
                 e = 19;
-                // console.log(c[964])
                 break;
             case 19:
                 return be(Tc, 14).r(),
@@ -12907,6 +13032,7 @@ function acMain() {
             }
     }
     function Ya(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -12978,6 +13104,7 @@ function acMain() {
                 break;
             case 16:
                 antcap.watchDataEvent(function(e, a, r) {
+                    // console.log('Ya('+ i + ') watchDataEvent c[1617] exe e = : ' + e + ', status = ' + s + ', r = ' + r);
                     c[1617]({
                         type: e,
                         status: a,
@@ -12997,6 +13124,7 @@ function acMain() {
             }
     }
     function Ja(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -13006,6 +13134,7 @@ function acMain() {
             case 1:
                 c[964] = c[964].concat(c[919]),
                 e = 2;
+                // console.log('Ja(' + i + ') 919 - 1 - 5')
                 break;
             case 2:
                 c[964] = c[964].concat([8192 & r[343] ? 3 : 2]),
@@ -13732,6 +13861,7 @@ function acMain() {
             case 13:
                 c[1307] = c[1286],
                 e = 14;
+                // console.log('c1307 = c1286 = ' + c[1307])
                 break;
             case 14:
                 e = 15;
@@ -15188,6 +15318,7 @@ function acMain() {
             }
     }
     function Sr(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -15225,6 +15356,7 @@ function acMain() {
             case 8:
                 c[964] = c[964].concat(c[919]),
                 e = 9;
+                // console.log('Sr(' + i + ') 919 - 8')
                 break;
             case 9:
                 return c[981]--,
@@ -15235,6 +15367,7 @@ function acMain() {
             case 11:
                 c[974] = r[339],
                 e = 12;
+                // console.log(' Sr(' + i + ') 974 = ' + c[974].length)
                 break;
             case 12:
                 c[975] = 140,
@@ -16026,6 +16159,7 @@ function acMain() {
             }
     }
     function Or(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -16035,6 +16169,7 @@ function acMain() {
             case 1:
                 c[964] = c[964].concat(c[934]),
                 e = 2;
+                // console.log('Or(' + i + ') 934 - 1')
                 break;
             case 2:
                 c[915] = 857013957 ^ r[15],
@@ -16063,6 +16198,7 @@ function acMain() {
             case 8:
                 c[981] = c[0],
                 e = 9;
+                // console.log('Or(' + i + ') c[981] = c[0] = ' + c[0])
                 break;
             case 9:
                 if (0 < c[981] && c[981] + 20 > c[0]) {
@@ -16107,6 +16243,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('Or(' + i + ') 974 = r36 = ' + r[36])
                 return c[974] = r[36],
                 void a.i(ob, 0)
             }
@@ -16280,6 +16417,7 @@ function acMain() {
             }
     }
     function Nr(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -16325,6 +16463,7 @@ function acMain() {
             case 9:
                 c[1634].attachEvent(c[1630] + c[1631], c[1617], !1),
                 e = 10;
+                // console.log('Nr(' + i + ') 9 c[1634] attachEvent ' + c[1634] + ', ' + (c[1630] + c[1631]) + ', 17 = ' + c[1617])
                 break;
             case 10:
                 e = 16;
@@ -16339,6 +16478,7 @@ function acMain() {
             case 12:
                 c[1634].attachEvent(c[1626] + c[1627], c[1617], !1),
                 e = 13;
+                // console.log('Nr(' + i + ') 12 c[1634] attachEvent ' + c[1634] + ', ' + (c[1626] + c[1627]) + ', 17 = ' + c[1617])
                 break;
             case 13:
                 e = 15;
@@ -16346,6 +16486,7 @@ function acMain() {
             case 14:
                 c[1634].attachEvent(c[1624] + c[1616], c[1617], !1),
                 e = 15;
+                // console.log('Nr(' + i + ')  14 c[1634] attachEvent ' + c[1634] + ', ' + (c[1624] + c[1616]) + ', 17 = ' + c[1617])
                 break;
             case 15:
                 e = 16;
@@ -16900,8 +17041,6 @@ function acMain() {
                 e = 8;
                 break;
             case 8:
-                // c[1567]是cookie
-                // c[1555]是/ALIPAYJSESSIONID=([^;]+)/
                 if (c[1555].test(c[1567])) {
                     e = 9;
                     break
@@ -17456,6 +17595,7 @@ function acMain() {
             }
     }
     function Yr(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -17469,6 +17609,7 @@ function acMain() {
                 }
                 ,
                 e = 2;
+                // console.log('Yr(' + i + ') 1 init 17')
                 break;
             case 2:
                 be(w, 15).r(),
@@ -19385,6 +19526,7 @@ function acMain() {
             }
     }
     function gc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -19402,10 +19544,12 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[934]),
                 e = 4;
+                // console.log('gc(' + i + ') 934 - 3')
                 break;
             case 4:
                 c[974] = r[14],
                 e = 5;
+                // console.log(' gc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 5:
                 c[975] = 216,
@@ -19471,6 +19615,7 @@ function acMain() {
             }
     }
     function mc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -19500,6 +19645,7 @@ function acMain() {
             case 6:
                 c[964] = c[964].concat(c[919]),
                 e = 7;
+                // console.log('mc(' + i + ') 919 - 6')
                 break;
             case 7:
                 c[982] = 372 ^ r[63][3],
@@ -19550,11 +19696,13 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('mc(' + i + ') 919 - 19')
                 return c[964] = c[964].concat(c[919]),
                 void a.i(C, 0)
             }
     }
     function jc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -19568,6 +19716,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[919]),
                 e = 3;
+                // console.log('jc(' + i + ') 919 - 2')
                 break;
             case 3:
                 c[915] = 20 < c[3] ? 20 : c[3],
@@ -19580,10 +19729,12 @@ function acMain() {
             case 5:
                 c[964] = c[964].concat(c[919]),
                 e = 6;
+                // console.log('jc(' + i + ') 919 - 5')
                 break;
             case 6:
                 c[981] = c[3],
                 e = 7;
+                // console.log('jc(' + i + ') c[981] = c[3] = ' + c[3])
                 break;
             case 7:
                 if (0 < c[981] && c[981] + 20 > c[3]) {
@@ -19618,6 +19769,7 @@ function acMain() {
             case 14:
                 c[974] = r[c[986]],
                 e = 15;
+                // console.log(' jc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 15:
                 c[975] = 230,
@@ -19901,15 +20053,18 @@ function acMain() {
             }
     }
     function Ac(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[964] = c[964].concat(c[919]),
                 e = 1;
+                // console.log('Ac(' + i + ') 919 - 0')
                 break;
             case 1:
                 c[974] = 1 ^ r[6][3],
                 e = 2;
+                // console.log(' Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 2:
                 c[975] = c[974] << 31,
@@ -19918,6 +20073,7 @@ function acMain() {
             case 3:
                 c[974] = 5108 ^ r[6][2],
                 e = 4;
+                // console.log('Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 4:
                 c[976] = c[974] << 16,
@@ -19926,6 +20082,7 @@ function acMain() {
             case 5:
                 c[974] = 64 ^ r[6][1],
                 e = 6;
+                // console.log('Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 6:
                 c[977] = c[974] << 9,
@@ -19934,6 +20091,7 @@ function acMain() {
             case 7:
                 c[974] = 499 ^ r[6][0],
                 e = 8;
+                // console.log('Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 8:
                 c[978] = c[974] << 0,
@@ -19942,6 +20100,7 @@ function acMain() {
             case 9:
                 c[974] = c[977] | c[978],
                 e = 10;
+                // console.log('Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 10:
                 c[977] = c[976] | c[974],
@@ -19978,6 +20137,7 @@ function acMain() {
             case 18:
                 c[974] = r[9],
                 e = 19;
+                // console.log('Ac(' + i + ') 974 = ' + c[974].length)
                 break;
             case 19:
                 return c[975] = 39,
@@ -20365,6 +20525,7 @@ function acMain() {
             case 11:
                 c[1294] = c[1646],
                 e = 12;
+                // console.log('c1294 = c1646 = ' + c[1294])
                 break;
             case 12:
                 c[1638] = document,
@@ -20385,14 +20546,17 @@ function acMain() {
             case 16:
                 c[1293] = c[1296] + c[1294],
                 e = 17;
+                // console.log('c1293 = c1296 + 1294 = ' + c[1296] + ' + ' + c[1294])
                 break;
             case 17:
                 c[1294] = c[1293] - c[1288],
                 e = 18;
+                // console.log('c1294 = c1293 - 1288 = ' + c[1293] + ' - ' + c[1288])
                 break;
             case 18:
                 c[1306] = c[1294],
                 e = 19;
+                // console.log('c1306 = c1294 = ' + c[1306])
                 break;
             case 19:
                 return c[1638] = c[1286],
@@ -20569,6 +20733,7 @@ function acMain() {
             }
     }
     function Oc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -20582,6 +20747,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[934]),
                 e = 3;
+                // console.log('Oc(' + i + ') 934 - 2')
                 break;
             case 3:
                 c[987] = 19,
@@ -20822,11 +20988,13 @@ function acMain() {
             }
     }
     function Nc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[964] = c[964].concat([32 & r[274] ? 3 : 2]),
                 e = 1;
+                // console.log('Nc(' + i + ') - 0')
                 break;
             case 1:
                 c[964] = c[964].concat([32 & r[275] ? 3 : 2]),
@@ -21077,15 +21245,18 @@ function acMain() {
             }
     }
     function Rc(e, a) {
+        let  i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[964] = c[964].concat(c[919]),
                 e = 1;
+                // console.log('Rc(' + i + ') 919 - 0')
                 break;
             case 1:
                 c[974] = 2097151 & r[2],
                 e = 2;
+                // console.log('Rc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 2:
                 c[975] = c[974] << 11,
@@ -21094,6 +21265,7 @@ function acMain() {
             case 3:
                 c[974] = r[2] >>> 21,
                 e = 4;
+                // console.log('Rc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 4:
                 c[976] = c[974] | c[975],
@@ -21126,6 +21298,7 @@ function acMain() {
             case 11:
                 c[974] = 262143 & r[4],
                 e = 12;
+                // console.log('Rc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 12:
                 c[975] = c[974] << 14,
@@ -21134,6 +21307,7 @@ function acMain() {
             case 13:
                 c[974] = r[4] >>> 18,
                 e = 14;
+                // console.log('Rc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 14:
                 c[976] = c[974] | c[975],
@@ -21161,6 +21335,7 @@ function acMain() {
             }
     }
     function Hc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -21214,6 +21389,7 @@ function acMain() {
             case 12:
                 c[964] = c[964].concat(c[919]),
                 e = 13;
+                // console.log('Hc(' + i + ') 919 - 12')
                 break;
             case 13:
                 c[1012] = 19,
@@ -21500,6 +21676,7 @@ function acMain() {
             }
     }
     function Kc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -21513,6 +21690,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[934]),
                 e = 3;
+                // console.log('Kc(' + i + ') 934 - 2')
                 break;
             case 3:
                 c[983] = -2147483649 & r[67],
@@ -21569,6 +21747,7 @@ function acMain() {
             case 16:
                 c[974] = r[71],
                 e = 17;
+                // console.log('Kc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 17:
                 c[975] = 197,
@@ -21584,11 +21763,13 @@ function acMain() {
             }
     }
     function Vc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[964] = c[964].concat(c[919]),
                 e = 1;
+                // console.log('Vc(' + i + ') 919 - 0')
                 break;
             case 1:
                 c[982] = 372 ^ r[61][3],
@@ -21752,6 +21933,7 @@ function acMain() {
             }
     }
     function Xc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -21793,10 +21975,12 @@ function acMain() {
             case 9:
                 c[964] = c[964].concat(c[919]),
                 e = 10;
+                // console.log('Xc(' + i + ') 919 - 9')
                 break;
             case 10:
                 c[974] = r[66],
                 e = 11;
+                // console.log('Xc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 11:
                 c[975] = 102,
@@ -21956,12 +22140,6 @@ function acMain() {
                 break;
             case 6:
                 try {
-                    // c[1638] #document
-                    // c[1644] cookie
-                    // 取document中的cookie
-                    if (c[1644] === 'cookie') {
-                        // console.log('get cookie = ' + c[1638][c[1644]])
-                    }
                     null == c[1638][c[1644]] && (c[1645] = !1)
                 } catch ($ex) {
                     c[1645] = !1
@@ -22002,9 +22180,20 @@ function acMain() {
             case 14:
                 e = 17;
                 break;
-            case 15:
+                case 15:
+                // 取pageX, pageY
                 c[1642] = c[1638][c[1644]],
                 e = 16;
+                if (c[1644] === 'cookie') {
+                    c[1642] = window.cookie
+                    // console.log('cookie = ' + c[1642])
+                }
+                if (c[1644] === 'pageX') {
+                    c[1642] = 735
+                }
+                if (c[1644] === 'pageY') {
+                    c[1642] = 414
+                }
                 break;
             case 16:
                 e = 19;
@@ -22083,8 +22272,7 @@ function acMain() {
                 e = 15;
                 break;
             case 15:
-                // c[1638] = document,
-                c[1638] = window,
+                c[1638] = document,
                 e = 16;
                 break;
             case 16:
@@ -22273,6 +22461,7 @@ function acMain() {
             }
     }
     function Qc(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -22286,6 +22475,7 @@ function acMain() {
             case 2:
                 c[964] = c[964].concat(c[919]),
                 e = 3;
+                // console.log('Qc(' + i + ') 919 - 2')
                 break;
             case 3:
                 c[999] = 19,
@@ -22314,6 +22504,7 @@ function acMain() {
             case 9:
                 c[974] = r[c[1004]],
                 e = 10;
+                // console.log('Qc(' + i + ') 974 = ' + c[974].length)
                 break;
             case 10:
                 c[975] = 227,
@@ -22871,6 +23062,7 @@ function acMain() {
             }
     }
     function ks(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -22928,6 +23120,7 @@ function acMain() {
             case 13:
                 c[964] = c[964].concat(c[919]),
                 e = 14;
+                // console.log('ks(' + i + ') 919 - 13')
                 break;
             case 14:
                 c[915] = 1404350538 ^ r[419],
@@ -23414,6 +23607,7 @@ function acMain() {
             }
     }
     function fs(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -23431,6 +23625,7 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[919]),
                 e = 4;
+                // console.log('fs(' + i + ') 919 - 3')
                 break;
             case 4:
                 c[915] = 916246395 ^ r[349],
@@ -23447,6 +23642,7 @@ function acMain() {
             case 7:
                 c[974] = r[350],
                 e = 8;
+                // console.log(' fs(' + i + ') 974 = ' + c[974].length)
                 break;
             case 8:
                 c[975] = 187,
@@ -23667,6 +23863,7 @@ function acMain() {
             }
     }
     function hs(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -23718,6 +23915,7 @@ function acMain() {
             case 11:
                 c[964] = c[964].concat(c[934]),
                 e = 12;
+                // console.log('hs(' + i + ') 934 - 11')
                 break;
             case 12:
                 c[980] = 12 ^ r[10][2],
@@ -23726,6 +23924,7 @@ function acMain() {
             case 13:
                 c[981] = c[980] << 28,
                 e = 14;
+                // console.log('hs(' + i + ') c[981] = c[980] << 28 = ' + c[980])
                 break;
             case 14:
                 c[980] = 17003 ^ r[10][1],
@@ -24104,6 +24303,7 @@ function acMain() {
             case 2:
                 c[1281] = c[1280] - c[7],
                 e = 3;
+                // console.log('c[1280] = ' + c[1280] + ', c[7] = ' + c[7])
                 break;
             case 3:
                 c[1282] = c[1280] - c[7],
@@ -24168,12 +24368,14 @@ function acMain() {
                 e = 18;
                 break;
             case 18:
+                // console.log('c1281 = ' + c[1281])
                 if (100 < c[1281]) {
                     e = 19;
                     break
                 }
                 return void a.i(kc, 16);
             case 19:
+                // console.log('c6 = c1278 = ' + c[1278])
                 return c[6] = c[1278],
                 void a.i(sb, 0)
             }
@@ -24263,6 +24465,7 @@ function acMain() {
             }
     }
     function Cs(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -24332,6 +24535,7 @@ function acMain() {
             case 16:
                 c[964] = c[964].concat(c[919]),
                 e = 17;
+                // console.log('Cs(' + i + ') 919 - 16')
                 break;
             case 17:
                 c[978] = "",
@@ -25024,6 +25228,7 @@ function acMain() {
             }
     }
     function Ls(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -25033,6 +25238,7 @@ function acMain() {
             case 1:
                 c[964] = c[964].concat(c[919]),
                 e = 2;
+                // console.log('Ls(' + i + ') 919 - 1')
                 break;
             case 2:
                 return c[981]--,
@@ -25043,6 +25249,7 @@ function acMain() {
             case 4:
                 c[974] = r[414],
                 e = 5;
+                // console.log(' Ls(' + i + ') 974 = ' + c[974].length)
                 break;
             case 5:
                 c[975] = 147,
@@ -25089,10 +25296,12 @@ function acMain() {
             case 15:
                 c[964] = c[964].concat(c[934]),
                 e = 16;
+                // console.log('Ls(' + i + ') 934 - 15')
                 break;
             case 16:
                 c[974] = r[415],
                 e = 17;
+                // console.log(' Ls(' + i + ') 974 = ' + c[974].length)
                 break;
             case 17:
                 c[975] = 64,
@@ -25700,6 +25909,7 @@ function acMain() {
             }
     }
     function Rs(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -25709,6 +25919,7 @@ function acMain() {
             case 1:
                 c[964] = c[964].concat(c[919]),
                 e = 2;
+                // console.log('Rs(' + i + ') 919 - 1')
                 break;
             case 2:
                 c[915] = 20 < c[4] ? 20 : c[4],
@@ -25725,6 +25936,7 @@ function acMain() {
             case 5:
                 c[981] = c[4],
                 e = 6;
+                // console.log('Rs(' + i + ') c[981] = c[4] = ' + c[4])
                 break;
             case 6:
                 if (0 < c[981] && c[981] + 20 > c[4]) {
@@ -25759,6 +25971,7 @@ function acMain() {
             case 13:
                 c[974] = r[c[986]],
                 e = 14;
+                // console.log(' Rs(' + i + ') 974 = ' + c[974].length)
                 break;
             case 14:
                 c[975] = 124,
@@ -25773,6 +25986,7 @@ function acMain() {
                 e = 17;
                 break;
             case 17:
+                // console.log('Rs(17) c974 = ' + c[974])
                 if (c[979] < c[974].length) {
                     e = 18;
                     break
@@ -26104,6 +26318,7 @@ function acMain() {
             }
     }
     function Ks(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -26121,6 +26336,7 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[934]),
                 e = 4;
+                // console.log('Ks(' + i + ') 934 - 4')
                 break;
             case 4:
                 c[915] = 15,
@@ -26205,6 +26421,7 @@ function acMain() {
             case 3:
                 c[1306] = c[1646],
                 e = 4;
+                // console.log('c1306 = c1646 = ' + c[1306])
                 break;
             case 4:
                 c[1638] = c[1286],
@@ -26221,6 +26438,7 @@ function acMain() {
             case 7:
                 c[1307] = c[1646],
                 e = 8;
+                // console.log('c1307 = c1646 = ' + c[1307])
                 break;
             case 8:
                 return void a.i(br, 16);
@@ -26496,7 +26714,6 @@ function acMain() {
                 }
                 return void a.i(Us, 0);
             case 14:
-                // 调用函数的内容 === 另一地方函数内容
                 if (c[1568][c[1571]] === c[1569]) {
                     e = 15;
                     break
@@ -26607,6 +26824,7 @@ function acMain() {
             }
     }
     function Ys(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -26624,6 +26842,7 @@ function acMain() {
             case 3:
                 c[964] = c[964].concat(c[919]),
                 e = 4;
+                // console.log('Ys(' + i + ') 919 - 3')
                 break;
             case 4:
                 c[963] = 18 ^ r[423][3],
@@ -26676,6 +26895,7 @@ function acMain() {
             case 16:
                 c[964] = c[964].concat(c[919]),
                 e = 17;
+                // console.log('Ys(' + i + ') 919 - 16')
                 break;
             case 17:
                 c[67] = c[964],
@@ -26686,6 +26906,7 @@ function acMain() {
                 e = 19;
                 break;
             case 19:
+                // console.log('Ys(' + i + ') 914 - 19 --- 914 len = ' + c[914].length);
                 return c[964] = c[914],
                 void a.i(ja, 0)
             }
@@ -26944,6 +27165,7 @@ function acMain() {
             }
     }
     function eb(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -26965,6 +27187,7 @@ function acMain() {
             case 4:
                 c[964] = c[964].concat(c[919]),
                 e = 5;
+                // console.log('eb(' + i + ') 919 - 4')
                 break;
             case 5:
                 c[1003] = 19,
@@ -26993,6 +27216,7 @@ function acMain() {
             case 11:
                 c[974] = r[c[1008]],
                 e = 12;
+                // console.log(' eb(' + i + ') 974 = ' + c[974].length)
                 break;
             case 12:
                 c[975] = 7,
@@ -27030,6 +27254,7 @@ function acMain() {
             }
     }
     function ab(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -27063,6 +27288,7 @@ function acMain() {
             case 7:
                 c[964] = c[964].concat(c[919]),
                 e = 8;
+                // console.log('ab(' + i + ') 919 - 7')
                 break;
             case 8:
                 c[915] = 105883011 ^ r[157],
@@ -27114,6 +27340,7 @@ function acMain() {
             }
     }
     function rb(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -27155,6 +27382,7 @@ function acMain() {
             case 9:
                 c[964] = c[964].concat(c[919]),
                 e = 10;
+                // console.log('rb(' + i + ') 919 - 9')
                 break;
             case 10:
                 c[1046] = 19,
@@ -27282,11 +27510,13 @@ function acMain() {
             }
     }
     function sb(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
                 c[7] = c[1280],
                 e = 1;
+                // console.log('c7 = 1280 = ' + c[7])
                 break;
             case 1:
                 c[1281] = c[9] % 20,
@@ -27303,6 +27533,7 @@ function acMain() {
             case 4:
                 c[9]++,
                 e = 5;
+                // console.log('  sb('+ i + ') c[[9] = ' + c[9])
                 break;
             case 5:
                 c[1282] = 4095 & c[9],
@@ -27366,93 +27597,93 @@ function acMain() {
             }
     }
     function bb(e, a) {
-        for (; -1 < e; ) {
+        for (; -1 < e; )
             switch (e) {
-                case 0:
-                    c[1216] = c[1214] >>> 15,
-                        e = 1;
-                    break;
-                case 1:
-                    c[1214] = 133169152 & c[1217],
-                        e = 2;
-                    break;
-                case 2:
-                    c[1218] = c[1214] >>> 20,
-                        e = 3;
-                    break;
-                case 3:
-                    c[1214] = 4160749568 & c[1217],
-                        e = 4;
-                    break;
-                case 4:
-                    c[1219] = c[1214] >>> 27,
-                        e = 5;
-                    break;
-                case 5:
-                    r[423] = [22654 ^ c[1215], 30 ^ c[1216], 78 ^ c[1218], 18 ^ c[1219]],
-                        e = 6;
-                    break;
-                case 6:
-                    c[20] = c[1217],
-                        e = 7;
-                    break;
-                case 7:
-                    e = 8;
-                    break;
-                case 8:
-                    e = 9;
-                    break;
-                case 9:
-                    e = 10;
-                    break;
-                case 10:
-                    e = -1;
-                    break;
-                case 11:
-                    c[14] = 0, e = 12;
-                    break;
-                case 12:
-                    c[1638] = navigator,
-                        e = 13;
-                    break;
-                case 13:
-                    c[1639] = c[1686],
-                        e = 14;
-                    break;
-                case 14:
-                    be(Ye, 16).r(),
-                        e = 15;
-                    break;
-                case 15:
-                    c[1697] = c[1646],
-                        e = 16;
-                    break;
-                case 16:
-                    if (c[1697]) {
-                        e = 17;
-                        break
-                    }
-                    return void a.i(l, 3);
-                case 17:
-                    c[1697] = c[1697].apply(navigator),
-                        e = 18;
-                    break;
-                case 18:
-                    if (c[1697]) {
-                        e = 19;
-                        break
-                    }
-                    return void a.i(l, 1);
-                case 19:
-                    return c[1697][c[1687] + c[1688]](function (e) {
-                        c[1698] = "atte",
-                            c[1699] = "mpt",
-                            c[1700] = "",
-                        -1 !== (e + c[1700]).indexOf(c[1698] + c[1699]) && (c[14] = 1)
-                    }),
-                        void a.i(l, 0)
+            case 0:
+                c[1216] = c[1214] >>> 15,
+                e = 1;
+                break;
+            case 1:
+                c[1214] = 133169152 & c[1217],
+                e = 2;
+                break;
+            case 2:
+                c[1218] = c[1214] >>> 20,
+                e = 3;
+                break;
+            case 3:
+                c[1214] = 4160749568 & c[1217],
+                e = 4;
+                break;
+            case 4:
+                c[1219] = c[1214] >>> 27,
+                e = 5;
+                break;
+            case 5:
+                r[423] = [22654 ^ c[1215], 30 ^ c[1216], 78 ^ c[1218], 18 ^ c[1219]],
+                e = 6;
+                break;
+            case 6:
+                c[20] = c[1217],
+                e = 7;
+                break;
+            case 7:
+                e = 8;
+                break;
+            case 8:
+                e = 9;
+                break;
+            case 9:
+                e = 10;
+                break;
+            case 10:
+                e = -1;
+                break;
+            case 11:
+                c[14] = 0,
+                e = 12;
+                break;
+            case 12:
+                c[1638] = navigator,
+                e = 13;
+                break;
+            case 13:
+                c[1639] = c[1686],
+                e = 14;
+                break;
+            case 14:
+                be(Ye, 16).r(),
+                e = 15;
+                break;
+            case 15:
+                c[1697] = c[1646],
+                e = 16;
+                break;
+            case 16:
+                if (c[1697]) {
+                    e = 17;
+                    break
+                }
+                return void a.i(l, 3);
+            case 17:
+                c[1697] = c[1697].apply(navigator),
+                e = 18;
+                break;
+            case 18:
+                if (c[1697]) {
+                    e = 19;
+                    break
+                }
+                return void a.i(l, 1);
+            case 19:
+                return c[1697][c[1687] + c[1688]](function(e) {
+                    c[1698] = "atte",
+                    c[1699] = "mpt",
+                    c[1700] = "",
+                    -1 !== (e + c[1700]).indexOf(c[1698] + c[1699]) && (c[14] = 1)
+                }),
+                void a.i(l, 0)
             }
-        }
     }
     function kb(e, a) {
         for (; -1 < e; )
@@ -27786,6 +28017,7 @@ function acMain() {
             }
     }
     function ob(e, a) {
+        let i = e;
         for (; -1 < e; )
             switch (e) {
             case 0:
@@ -27833,10 +28065,12 @@ function acMain() {
             case 10:
                 c[964] = c[964].concat(c[934]),
                 e = 11;
+                // console.log('ob(' + i + ') 934 - 10')
                 break;
             case 11:
                 c[974] = r[37],
                 e = 12;
+                // console.log(' ob(' + i + ') 974 = ' + c[974].length)
                 break;
             case 12:
                 c[975] = 24,
@@ -27966,11 +28200,3 @@ function init(cookie) {
     window.cookie = cookie
     return window[c[1708]]
 }
-
-// document.onreadystatechange = () => {
-//   if (document.readyState === 'complete') {
-//     let test_cookie = 'tk=mWeAqfZoecsJc7VtkHXzTrNAm1kTC5vuLe6R6Axhb1b0; JSESSIONID=147F7A4673B47E44A8EFDF876DA6D859; _jc_save_wfdc_flag=dc; RAIL_EXPIRATION=1674003236827; RAIL_DEVICEID=G-xaHdDGTtGXU-yWJW5Ie_Af8EwVFIl2rDcwk3_ueNjiSz2ZPerafX4z2zAZqerEfFDxxNsAPr8spfYDrw9QpXHZAXt_3nhgzl1APEl5ySvLgPyrWquBzPT5fHgKB4-QJR_v58M8eNFINHvnq5X3UIY0i7aVycm9; _jc_save_czxxcx_toStation=%u5317%u4EAC%2CBJP; _jc_save_czxxcx_fromDate=2023-01-14; _jc_save_zwdch_fromStation=%u5317%u4EAC%2CBJP; _jc_save_zwdch_cxlx=1; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; _jc_save_showIns=true; _jc_save_toStation=%u957F%u6C99%u5357%2CCWQ; _jc_save_fromStation=%u5317%u4EAC%u897F%2CBXP; _jc_save_fromDate=2023-09-19; _jc_save_toDate=2023-09-18; BIGipServerpassport=988283146.50215.0000; route=c5c62a339e7744272a54643b3be5bf64; BIGipServerpool_passport=48497162.50215.0000; fo=n9toyblyrw7y1acpFaz49MAl1XyMNEQo7BmbI0Dyq7-y5ndvuy2xqcVMgXVTOI8G0JeqrWBAXh5tb4Bca9G2qFBrBlKDAgbjoXqeadI2xQUheu3GUZ0Ic_xtdbBkf-5IYijLhA9g7_7_DWsVwsY399iG36TdIBPrPUX_A1_3_2E43fgr8WxQlZyLBPcTjPdAuqxVk1ndK1XzVI6l; BIGipServerotn=1574502666.24610.0000; uKey=5360cffd44428a3dae9426773a0873f25e349da9328fe4c6dc1a99c43440056a'
-//     let ret = init(test_cookie);
-//     console.log(ret.toString())
-//   }
-// };
