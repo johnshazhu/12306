@@ -25,12 +25,27 @@ from=出发站
 to=到达站
 passengers=乘客
 ```
-查询余票时，学生票purpose_codes为0x00，成人为ADULT
+配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg扫描登录后，自动购票
 
-Hc - Se - rb - Sr - k15 c[981] > 0 - vc - Hc
+[//]: # (查询余票时，学生票purpose_codes为0x00，成人为ADULT)
 
 
+passengerInfo_js.js中调用n()来获取encryptedData
+```
+    function n() {
+        var x = "";
+        try {
+            x = window.json_ua.toString()
+        } catch (y) {
+            x = ""
+        }
+        return x
+    }
+```
 
+suite1608722853171.js中获取encryptedData的大致流程
+
+```
 Wa - Os - je - Rc - Ac - hs - Ce - Q - gc(19) - Or(0) c981-- 循环 981 = c0 - Or(19)
 
 Or(19) - ob - Be - $e - Ie - Oe - xe - Cs - Vc - mc - C - Xc - Kc - R - jc(0) - 981 = c3 - ba(1)
@@ -48,3 +63,4 @@ Sr(10) - se(0) - Ja(0) - Z - fs - ua - fa(17) - ma(0) - Oc - Ls(2) c981-- fa(0) 
 fa(6) -- c981.length == 0时Ls(3)
 
 Ls(3) - W(0) - la - ks - Ge - Ys - ja
+```
