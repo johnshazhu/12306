@@ -39,8 +39,8 @@ def create_qr64():
         print(rsp['image'])
         print(rsp['uuid'])
         image = base64.b64decode(rsp['image'])
-        if os.path.exists("/Users/breeze/PycharmProjects/12306/resource/qr_image.jpg"):
-            os.remove("/Users/breeze/PycharmProjects/12306/resource/qr_image.jpg")
+        if os.path.exists("resource/qr_image.jpg"):
+            os.remove("resource/qr_image.jpg")
         file = open('resource/qr_image.jpg', 'wb')
         file.write(image)
         file.close()
