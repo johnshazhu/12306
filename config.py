@@ -1,5 +1,6 @@
 import json
 
+import api_with_cookie
 import global_var
 from js.js_util import exec_js
 from station import init_station_names
@@ -32,6 +33,8 @@ class Config:
 def init_config():
     global_var.init()
 
+    api_with_cookie.init()
+
     config_dict = {}
     with open('config.properties', 'r') as f:
         for line in f.readlines():
@@ -39,7 +42,8 @@ def init_config():
             if not len(line):
                 continue
             key = line.split('=')[0]
-            config_dict[key] = str(line)[(len(key) + 1):]
+            if len(str(line)[(len(key) + 1):]) > 0:
+                config_dict[key] = str(line)[(len(key) + 1):]
 
     set_value('config_dict', config_dict)
     config_check_pass = True
@@ -71,6 +75,9 @@ def init_config():
         config_check_pass = False
         print('需要在config.properties中设置预订车次坐席类别seatType=xxx')
 
+    if 'castNum' not in config_dict:
+        config_check_pass = False
+        print('需要在config.properties中设置预订登录账号对应人的身份证的后四位castNum=xxx')
 
     if config_check_pass:
         station_name_list = init_station_names()

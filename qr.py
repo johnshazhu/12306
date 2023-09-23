@@ -28,7 +28,6 @@ def is_success(response):
     return False
 
 def create_qr64():
-    init()
     url = 'https://kyfw.12306.cn/passport/web/create-qr64'
     rsp = update_cookie(url, post_data={
         'appid': 'otn'
@@ -85,6 +84,7 @@ def uamauthclient(new_app_tk):
     })
 
 def web_auth_uamtk_static():
+    print('查看是否已登录')
     return update_cookie('https://kyfw.12306.cn/passport/web/auth/uamtk-static', post_data={
             'appid': 'otn'
         }, other={
@@ -94,11 +94,25 @@ def web_auth_uamtk_static():
 def conf():
     return update_cookie('https://kyfw.12306.cn/index/otn/login/conf')
 
+def get_login_config():
+    print('获取登录配置')
+    rsp = update_cookie('https://kyfw.12306.cn/otn/login/conf')
+    if is_success(rsp):
+        data = rsp['data']
+        set_value('is_uam_login', data['is_uam_login'] == 'Y')
+        set_value('is_login_passCode', data['is_login_passCode'] == 'Y')
+        set_value('is_login', data['is_login'] == 'Y')
+        set_value('queryUrl', data['queryUrl'])
+    return rsp
+
 def check_verify():
     rsp = check_login_verify()
     if rsp['login_check_code'] == '0':
         process_start_from_login()
+    elif rsp['login_check_code'] == '2':
+        print('滑块方式验证')
     elif rsp['login_check_code'] == '3':
+        print('短信验证码方式验证')
         rsp = get_sms_code()
         if is_success(rsp):
             notification_util.show_notification('短信验证码', '请注意查看短信验证码并输入')
@@ -111,20 +125,21 @@ def check_verify():
 def check_login_verify():
     return update_cookie('https://kyfw.12306.cn/passport/web/checkLoginVerify', post_data={
         'username': get_value('config_obj').username,
-            'appid': 'otn'
-        }, other={
-            'Referer': 'https://kyfw.12306.cn/otn/resources/login.html',
-            'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8',
-            'Origin': 'https://kyfw.12306.cn',
-            'Accept': '*/*'
-        })
+        'appid': 'otn'
+    }, other={
+        'Referer': 'https://kyfw.12306.cn/otn/resources/login.html',
+        'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8',
+        'Origin': 'https://kyfw.12306.cn',
+        'Accept': '*/*'
+    })
 
 def get_sms_code():
+    print('获取短信验证码')
     url = 'https://kyfw.12306.cn/passport/web/getMessageCode'
     check_data = {
         'username': get_value('config_obj').username,
         'appid': 'otn',
-        'castNum': '4113',
+        'castNum': get_value('config_dict')['castNum'],
     }
     return update_cookie(url, post_data=check_data, other={
         'Referer': 'https://kyfw.12306.cn/otn/resources/login.html',
@@ -135,21 +150,52 @@ def get_sms_code():
 
 def submit_sms_code_callback():
     sms_code = handle_sms_code.get_sms_code()
-    config = get_value('config')
+    config = get_value('config_obj')
     config.checkMode = '0'
     config.randCode = sms_code
-    set_value('config', config)
+    set_value('config_obj', config)
 
     handle_sms_code.destroy()
     process_start_from_login()
 
 
+def to_user_auth_center():
+    rsp = uamtk()
+    if is_success(rsp):
+        tk = rsp['newapptk']
+        if tk is None:
+            tk = rsp['apptk']
+        rsp = uamauthclient(tk)
+        if is_success(rsp):
+            user_login()
+            rsp = conf()
+            set_value('can_go_next', is_success(rsp) and rsp['data']['is_login'] == 'Y')
+            return rsp
+
 def process_start_from_login():
     print('process_start_from_login')
-    web_login()
+    rsp = web_login()
+    session = get_value('session')
+    if 'isPasswordCopy' in session.headers:
+        del session.headers['isPasswordCopy']
+        set_value('session', session)
+    if rsp['result_code'] == 0:
+        print('跳转otn/login/userLogin')
+        rsp = user_login()
+        if rsp == 302:
+            redirect_user_login()
+        to_user_auth_center()
+    elif rsp['result_code'] == 91 or rsp['result_code'] == 92 or rsp['result_code'] == 94 or rsp['result_code'] == 95 or rsp['result_code'] == 97:
+        is_uam_login = get_value('is_uam_login')
+        if is_uam_login:
+            to_user_auth_center()
+    elif rsp['result_code'] == 101:
+        print('您的密码很久没有修改了，为降低安全风险，请您重新设置密码后再登录')
+    else:
+        print(rsp['result_message'])
 
 def web_login():
-    return update_cookie('https://kyfw.12306.cn/passport/web/login', post_data=get_value('config').__dict__, other={
+    return update_cookie('https://kyfw.12306.cn/passport/web/login', post_data=get_value('config_obj').__dict__, other={
         'isPasswordCopy': 'N',
         'Referer': 'https://kyfw.12306.cn/otn/resources/login.html',
         'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8',
@@ -469,8 +515,11 @@ def timer_job(token, index):
     if disp_time <= 0:
         rsp = result_order_for_dc_queue(get_value('orderId'), token)
         if check_order_success(rsp):
-            print('order success')
-        return True
+            print('order success, orderId = ' + get_value('orderId'))
+            return True
+        else:
+            print('order confirm fail')
+            return False
 
     if disp_time == next_request_time:
         rsp = query_order_wait_time(token)
@@ -509,6 +558,7 @@ def process_from_query_start():
                     selected_train_info = detail['queryLeftNewDTO']
                     rsp = get_queue_count(token, selected_train_info)
                     if check_can_confirm_order(rsp):
+                        # encrypted_data = exec_js('js/suit.js', 'init', get_cookie())
                         rsp = confirm_single_for_queue(token, passenger_list, selected_train_info, '')
                         if check_wait_time(rsp):
                             set_value('disp_time', 1)
@@ -536,6 +586,7 @@ def test_order_data():
 if __name__ == '__main__':
     ssl._create_default_https_context = ssl._create_unverified_context
     if init_config():
+        # init()
         uuid = create_qr64()
         if uuid is not None:
             check_qr(uuid)
@@ -545,11 +596,6 @@ if __name__ == '__main__':
             if rsp == 302:
                 rsp = redirect_user_login()
 
-            rsp = uamtk()
-            if is_success(rsp):
-                rsp = uamauthclient(rsp['newapptk'])
-                if is_success(rsp):
-                    user_login()
-                    rsp = conf()
-                    if is_success(rsp):
-                        process_from_query_start()
+            rsp = to_user_auth_center()
+            if is_success(rsp) and rsp['data']['is_login'] == 'Y':
+                process_from_query_start()
