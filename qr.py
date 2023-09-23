@@ -208,7 +208,7 @@ def query_left_tickets():
         'leftTicketDTO.train_date': get_value('config_dict')['date'],
         'leftTicketDTO.from_station': get_value('from_station_code'),
         'leftTicketDTO.to_station': get_value('to_station_code'),
-        'purpose_codes': 'ADULT',
+        'purpose_codes': get_value('config_dict')['purpose_codes'],
     }, other={
         'Referer': 'https://kyfw.12306.cn/otn/leftTicket/init',
         'If-Modified-Since': '0',
@@ -241,7 +241,7 @@ def submit_order(train_detail, back_date):
         'secretStr': urllib.parse.unquote(train_detail['secretStr'], encoding='utf-8', errors='replace'),
         'train_date': order_date,
         'back_train_date': get_today_str(),
-        'purpose_codes': 'ADULT',
+        'purpose_codes': get_value('config_dict')['purpose_codes'],
         'tour_flag': 'dc',
         'query_from_station_name': get_value('config_dict')['from'],
         'query_to_station_name': get_value('config_dict')['to'],
@@ -299,9 +299,8 @@ def get_queue_count(token, train_info):
         'seatType': config_dict['seatType'],
         'fromStationTelecode': train_info['from_station_telecode'],
         'toStationTelecode': train_info['to_station_telecode'],
-        # 'leftTicket': train_info['yp_info'],
         'leftTicket': ticket_info_for_passenger_form['queryLeftTicketRequestDTO']['ypInfoDetail'],
-        'purpose_codes': '00',
+        'purpose_codes': ticket_info_for_passenger_form['purpose_codes'],
         'train_location': train_info['location_code'],
         'REPEAT_SUBMIT_TOKEN': token
     }, other={
@@ -335,7 +334,8 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
         'leftTicketStr': ticket_info_for_passenger_form['leftTicketStr'],
         'train_location': ticket_info_for_passenger_form['train_location'],
         'choose_seats': config_dict['chooseSeats'],
-        'seatDetailType': '000',
+        # 卧铺席， 2个下铺200，两个中铺020，其他 101（上下铺）
+        'seatDetailType': config_dict['seatDetailType'],
         # 静音车厢
         'is_jy': 'N',
         # 残疾人
@@ -547,6 +547,9 @@ def process_from_query_start():
     rsp = query_left_tickets()
     if is_success(rsp):
         detail = get_selected_train_detail(rsp)
+        # 可能需要调用checkUser接口
+        # rsp = check_user()
+        # if is_success(rsp) and rsp['data']['flag']:
         rsp = submit_order(detail, '')
         if is_success(rsp):
             token = get_repeat_submit_token()
