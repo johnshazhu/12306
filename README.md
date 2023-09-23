@@ -18,15 +18,20 @@
 ```
 username=12306账号
 password=12306密码
-trainCode=订票车次，可多个车次，优先匹配前面的
+trainCode=订票车次（可多个车次，优先匹配前面的）
 seatType=席别（上面坐席类别说明中的11种）
 date=车次日期，格式为yyyy-MM-dd，例如 2023-09-19）
 from=出发站
 to=到达站
-passengers=乘客
+passengers=乘客（可多个，名字以,隔开）
 castNum=登录用户的身份证的后4位，获取短信验证码用
+chooseSeats=选择坐席（高铁坐席一般为A、B、C, D、F，一人的话可以设置1F，1A等，两人的话为1D1F，或1F2F）
 ```
-配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg扫描登录后，自动购票
+配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg扫描登录后，自动购票。  
+
+或执行login.py，通过账号密码方式自动登录后购票。
+
+暂只支持成人单程票。
 
 [//]: # (查询余票时，学生票purpose_codes为0x00，成人为ADULT)
 

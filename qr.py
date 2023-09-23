@@ -110,7 +110,7 @@ def check_verify():
     if rsp['login_check_code'] == '0':
         process_start_from_login()
     elif rsp['login_check_code'] == '2':
-        print('滑块方式验证')
+        print('滑块方式验证暂不支持')
     elif rsp['login_check_code'] == '3':
         print('短信验证码方式验证')
         rsp = get_sms_code()
@@ -277,7 +277,7 @@ def check_order_info(passengers, token):
         'passengerTicketStr': get_passenger_tickets(passengers),
         'oldPassengerStr': get_old_passengers(passengers),
         'tour_flag': 'dc',
-        'whatsSelect': '1',
+        'whatsSelect': str(len(passengers)),
         'sessionId': '',
         'sig': '',
         'scene': 'nc_login',
@@ -334,7 +334,7 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
         'key_check_isChange': ticket_info_for_passenger_form['key_check_isChange'],
         'leftTicketStr': ticket_info_for_passenger_form['leftTicketStr'],
         'train_location': ticket_info_for_passenger_form['train_location'],
-        'choose_seats': '1F',
+        'choose_seats': config_dict['chooseSeats'],
         'seatDetailType': '000',
         # 静音车厢
         'is_jy': 'N',
@@ -343,7 +343,7 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
         # js 中...window.json_ua.toString()
         # 'encryptedData': get_encrypted_data(),
         'encryptedData': encrypted_data,
-        'whatsSelect': 1,
+        'whatsSelect': len(confirm_order_passengers),
         # 动卧？
         'roomType': '00',
         # 单程往返全选
