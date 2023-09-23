@@ -1,7 +1,3 @@
-import api
-import json
-
-
 class TicketResultData:
     def __init__(self, result, flag, map):
         self.result = result
