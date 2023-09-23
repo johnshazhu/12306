@@ -92,7 +92,7 @@ def init_config():
         config_content = json.dumps(config_dict)
         config_obj = json.loads(config_content, object_hook=Config.object_hook)
         config_obj.password = get_encrypt_content(config_obj.password)
-        print('config_obj = ' + config_obj.username)
+        print('username = ' + config_obj.username)
         set_value('config_obj', config_obj)
     return config_check_pass
 

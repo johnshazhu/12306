@@ -35,8 +35,8 @@ def create_qr64():
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
     if rsp['result_code'] == '0':
-        print(rsp['image'])
-        print(rsp['uuid'])
+        # print(rsp['image'])
+        # print(rsp['uuid'])
         image = base64.b64decode(rsp['image'])
         if os.path.exists("resource/qr_image.jpg"):
             os.remove("resource/qr_image.jpg")
@@ -515,6 +515,7 @@ def timer_job(token, index):
     if disp_time <= 0:
         rsp = result_order_for_dc_queue(get_value('orderId'), token)
         if check_order_success(rsp):
+            set_value('order_success', True)
             print('order success, orderId = ' + get_value('orderId'))
             return True
         else:
@@ -550,6 +551,8 @@ def process_from_query_start():
         # 可能需要调用checkUser接口
         # rsp = check_user()
         # if is_success(rsp) and rsp['data']['flag']:
+        if detail is None:
+            return False
         rsp = submit_order(detail, '')
         if is_success(rsp):
             token = get_repeat_submit_token()
@@ -567,14 +570,12 @@ def process_from_query_start():
                             set_value('disp_time', 1)
                             set_value('next_request_time', 1)
                             start_timer_job(token)
+                            return True
                         else:
                             print('check_wait_time failed')
                             print(rsp['data'])
-    else:
-        print('query_left_tickets failure rsp =\n')
-        print(rsp)
-        time.sleep(3)
-        process_from_query_start()
+
+    return False
 
 def test_order_data():
     str = '''
@@ -589,7 +590,6 @@ def test_order_data():
 if __name__ == '__main__':
     ssl._create_default_https_context = ssl._create_unverified_context
     if init_config():
-        # init()
         uuid = create_qr64()
         if uuid is not None:
             check_qr(uuid)
@@ -601,4 +601,16 @@ if __name__ == '__main__':
 
             rsp = to_user_auth_center()
             if is_success(rsp) and rsp['data']['is_login'] == 'Y':
-                process_from_query_start()
+                config_dict = get_value('config_dict')
+                delay_time = 0
+                if 'timesBetweenTwoQuery' in config_dict:
+                    delay_time = float(config_dict['timesBetweenTwoQuery'])
+
+                if delay_time > 0.3:
+                    set_value('order_success', False)
+                    while not get_value('order_success'):
+                        success = process_from_query_start()
+                        if not success:
+                            time.sleep(delay_time)
+                else:
+                    process_from_query_start()
