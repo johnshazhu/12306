@@ -4,6 +4,5 @@ function getTrainDate(dateStr) {
 }
 
 function getDatetime() {
-    console.log('aaaa')
     return new Date().getTime()
 }

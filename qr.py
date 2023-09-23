@@ -1,9 +1,11 @@
 import base64
+import datetime
 import json
 import os
 import ssl
 import time
 import urllib
+import threading
 from urllib.parse import urlencode
 
 import handle_sms_code
@@ -13,6 +15,10 @@ from config import init_config
 from global_var import get_value, set_value
 from js.js_util import exec_js
 from ticket.query_left_ticket import get_detail, can_buy_seat
+
+
+def get_today_str():
+    return datetime.date.today().strftime('%Y-%m-%d')
 
 def is_success(response):
     if 'result_code' in response:
@@ -170,13 +176,25 @@ def query_left_tickets():
         'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8'
     }, post_method=False)
 
+def check_user():
+    url = 'https://kyfw.12306.cn/otn/login/checkUser'
+    post_data = {
+        '_json_att': ''
+    }
+    rsp = update_cookie(url, post_data=post_data, other={
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    })
+    if is_success(rsp) and rsp['data']['flag']:
+        return True
+    return False
+
 def submit_order(train_detail, back_date):
     order_date = get_value('config_dict')['date']
     submit_order_url = 'https://kyfw.12306.cn/otn/leftTicket/submitOrderRequest'
     post_data = {
         'secretStr': urllib.parse.unquote(train_detail['secretStr'], encoding='utf-8', errors='replace'),
         'train_date': order_date,
-        'back_train_date': '2023-09-22',
+        'back_train_date': get_today_str(),
         'purpose_codes': 'ADULT',
         'tour_flag': 'dc',
         'query_from_station_name': get_value('config_dict')['from'],
@@ -229,7 +247,7 @@ def get_queue_count(token, train_info):
     ticket_info_for_passenger_form = get_value('ticket_info_for_passenger_form')
 
     return update_cookie(url, post_data={
-        'train_date': exec_js('test/date.js', 'getTrainDate', config_dict['date']),
+        'train_date': exec_js('js/date.js', 'getTrainDate', config_dict['date']),
         'train_no': train_info['train_no'],
         'stationTrainCode': train_info['station_train_code'],
         'seatType': config_dict['seatType'],
@@ -258,10 +276,10 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
     cookie['guidesStatus'] = 'off'
     cookie['_jc_save_wfdc_flag'] = 'dc'
     cookie['_jc_save_showIns'] = 'true'
-    cookie['_jc_save_fromStation'] = '%u5317%u4EAC%2CBXP'
-    cookie['_jc_save_toStation'] = '%u957F%u6C99%2CCWQ'
+    cookie['_jc_save_fromStation'] = get_value('_jc_save_fromStation')
+    cookie['_jc_save_toStation'] = get_value('_jc_save_toStation')
     cookie['_jc_save_fromDate'] = config_dict['date']
-    cookie['_jc_save_toDate'] = '2023-09-22'
+    cookie['_jc_save_toDate'] = get_today_str()
 
     return update_cookie(url, post_data={
         'passengerTicketStr': get_passenger_tickets(confirm_order_passengers),
@@ -303,7 +321,7 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
 def query_order_wait_time(token):
     url = 'https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime'
     return update_cookie(url, post_data={
-        'random': exec_js('test/date.js', 'getDatetime'),
+        'random': exec_js('js/date.js', 'getDatetime'),
         'tourFlag': 'dc',
         '_json_att': '',
         'REPEAT_SUBMIT_TOKEN': token
@@ -429,8 +447,54 @@ def need_resend_wait_time_req(rsp):
 def check_order_success(rsp):
     return rsp['status'] and rsp['data']['submitStatus']
 
+def start_timer_job(token):
+    t1 = threading.Thread(target=timer_job, args=(token, 0))
+    t2 = threading.Thread(target=delay_timer_job, args=(token,))
+    print("{}".format(int(time.time())) + ' : start_timer_job')
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+
+def delay_timer_job(token):
+    print("{}".format(int(time.time())) + ' : delay_timer_job')
+    timer = threading.Timer(1.0, function=timer_job, args=(token, 1))
+    timer.start()
+
+def timer_job(token, index):
+    disp_time = get_value('disp_time')
+    next_request_time = get_value('next_request_time')
+    print("{}".format(int(time.time())) + ' : execute timer_job index = ' + str(index) + ', disp_time = ' + str(disp_time) + ', next_request_time = ' + str(next_request_time))
+
+    if disp_time <= 0:
+        rsp = result_order_for_dc_queue(get_value('orderId'), token)
+        if check_order_success(rsp):
+            print('order success')
+        return True
+
+    if disp_time == next_request_time:
+        rsp = query_order_wait_time(token)
+        if rsp['status'] and rsp['data']['queryOrderWaitTimeStatus']:
+            wait_time = rsp['data']['waitTime']
+            if wait_time != -100:
+                set_value('disp_time', wait_time)
+                set_value('orderId', rsp['data']['orderId'])
+                d = int(wait_time / 1.5)
+                if d > 60:
+                    d = 60
+                b = wait_time - d
+                if b <= 0:
+                    b = 1
+                set_value('next_request_time', b)
+
+    if disp_time > 1:
+        disp_time -= 1
+        set_value('disp_time', disp_time)
+    if index > 0:
+        time.sleep(1)
+        timer_job(token, index + 1)
+
 def process_from_query_start():
-    order_success = False
     rsp = query_left_tickets()
     if is_success(rsp):
         detail = get_selected_train_detail(rsp)
@@ -447,29 +511,17 @@ def process_from_query_start():
                     if check_can_confirm_order(rsp):
                         rsp = confirm_single_for_queue(token, passenger_list, selected_train_info, '')
                         if check_wait_time(rsp):
-                            resend_times = 0
-                            while resend_times < 3:
-                                rsp = query_order_wait_time(token)
-                                print('query_order_wait_time rsp = \n')
-                                print(rsp)
-                                if need_resend_wait_time_req(rsp):
-                                    print('need resend wait time request')
-                                    time.sleep(1)
-                                    continue
-                                else:
-                                    if need_check_order(rsp):
-                                        rsp = result_order_for_dc_queue(rsp['data']['orderId'], token)
-                                        if check_order_success(rsp):
-                                            print('success')
-                                            order_success = True
-                                        break
-                                resend_times += 1
+                            set_value('disp_time', 1)
+                            set_value('next_request_time', 1)
+                            start_timer_job(token)
                         else:
+                            print('check_wait_time failed')
                             print(rsp['data'])
     else:
         print('query_left_tickets failure rsp =\n')
         print(rsp)
-    return order_success
+        time.sleep(3)
+        process_from_query_start()
 
 def test_order_data():
     str = '''
@@ -499,10 +551,5 @@ if __name__ == '__main__':
                 if is_success(rsp):
                     user_login()
                     rsp = conf()
-                    retry_count = 0
                     if is_success(rsp):
-                        while retry_count < 3:
-                            if process_from_query_start():
-                                break
-                            else:
-                                retry_count += 1
+                        process_from_query_start()

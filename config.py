@@ -5,6 +5,7 @@ from js.js_util import exec_js
 from station import init_station_names
 
 from global_var import set_value
+from unescape import escape
 
 SM4_key = 'tiekeyuankp12306'
 
@@ -79,6 +80,8 @@ def init_config():
             to_station_code = get_station_code(config_dict['to'], station_name_list)
             set_value('from_station_code', from_station_code)
             set_value('to_station_code', to_station_code)
+            set_value('_jc_save_fromStation', escape(config_dict['from'] + ',' + from_station_code))
+            set_value('_jc_save_toStation', escape(config_dict['to'] + ',' + to_station_code))
         config_content = json.dumps(config_dict)
         config_obj = json.loads(config_content, object_hook=Config.object_hook)
         config_obj.password = get_encrypt_content(config_obj.password)
