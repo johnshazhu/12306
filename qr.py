@@ -577,15 +577,6 @@ def process_from_query_start():
 
     return False
 
-def test_order_data():
-    str = '''
-    {"validateMessagesShowId": "_validatorMessage", "status": true, "httpstatus": 200,
-     "data": {"queryOrderWaitTimeStatus": true, "count": 0, "waitTime": -100, "requestId": 7110945596848663027,
-              "waitCount": 0, "tourFlag": "dc", "orderId": null}, "messages": [], "validateMessages": {}}
-    '''
-    rsp = json.loads(str)
-    need_check_order(rsp)
-
 
 if __name__ == '__main__':
     ssl._create_default_https_context = ssl._create_unverified_context

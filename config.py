@@ -36,50 +36,47 @@ def init_config():
     api_with_cookie.init()
 
     config_dict = {}
+
+    seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O']
+    can_choose_seats_type = ['9', 'M', 'O']
+    can_choose_seat_detail_type = ['3', '4', 'F']
+    keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType'
+    config_check_pass = True
     with open('config.properties', 'r') as f:
         for line in f.readlines():
             line = line.strip()
             if not len(line):
                 continue
             key = line.split('=')[0]
-            if len(str(line)[(len(key) + 1):]) > 0:
-                config_dict[key] = str(line)[(len(key) + 1):]
+            config_dict[key] = str(line)[(len(key) + 1):]
+            if len(config_dict[key]) == 0:
+                if keys_check_ignore.find(key) == -1:
+                    config_check_pass = False
+                    print(f'请在config.properties中配置{key}的值=xxx')
 
-    set_value('config_dict', config_dict)
-    config_check_pass = True
-    if 'username' not in config_dict:
+    # 检查坐席设置是否正常
+    if config_check_pass and not is_value_exist(config_dict['seatType'], seats):
         config_check_pass = False
-        print('请在config.properties中配置用户名username=xxx')
+        print(f'seatType的值应该在{seats}中')
 
-    if 'password' not in config_dict:
-        config_check_pass = False
-        print('请在config.properties中配置用户名password=xxx')
+    # 检查是动车/高铁坐席
+    if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seats_type):
+        # 动车或高铁时，seatDetailType设置无效，默认为'000'
+        config_dict['seatDetailType'] = '000'
+        if len(config_dict['chooseSeats']) == 0:
+            config_check_pass = False
+            print('请在config.properties中配置chooseSeats的值')
 
-    if 'trainCode' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置预订的车次trainCode=xxx')
-
-    if 'from' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置出发站from=xxx')
-
-    if 'to' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置到达站to=xxx')
-
-    if 'date' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置预订车次的日期date=xxx')
-
-    if 'seatType' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置预订车次坐席类别seatType=xxx')
-
-    if 'castNum' not in config_dict:
-        config_check_pass = False
-        print('需要在config.properties中设置预订登录账号对应人的身份证的后四位castNum=xxx')
+    # 检查是否是卧铺类坐席
+    if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seat_detail_type):
+        # 卧铺类时，chooseSeats设置无效，默认为''
+        config_dict['chooseSeats'] = ''
+        if len(config_dict['seatDetailType']) == 0:
+            config_check_pass = False
+            print('请在config.properties中配置seatDetailType的值')
 
     if config_check_pass:
+        set_value('config_dict', config_dict)
         station_name_list = init_station_names()
 
         if station_name_list is not None:
@@ -96,6 +93,14 @@ def init_config():
         set_value('config_obj', config_obj)
     return config_check_pass
 
+
+def is_value_exist(value, value_list):
+    try:
+        index = value_list.index(value)
+        return index >= 0
+    except Exception as err:
+        print(f'ignore this err...{err}')
+    return False
 
 def get_station_code(name, station_name_list):
     for station in station_name_list:
