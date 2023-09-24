@@ -423,12 +423,19 @@ def get_selected_train_detail(rsp):
     check_train_code = False
     if train_code is not None and len(str(train_code)) > 0:
         check_train_code = True
+    train_list = train_code.split(',')
+    train_set = set(train_list)
     for detail in detail_list:
         train_info = detail['queryLeftNewDTO']
-        if train_info['canWebBuy'] != 'Y' or \
-                (check_train_code and train_code.find(
-                    train_info['station_train_code']) == -1) or \
-                not can_buy_seat(train_info, get_value('config_dict')['seatType']):
+        # 车次不在预定车次列表里
+        if check_train_code and train_info['station_train_code'] not in train_set:
+            continue
+
+        # if train_info['houbu_train_flag'] == '1' and train_info['houbu_seat_limit'] == '':
+        #   print('可候补')
+
+        # 不能预订 或 对应坐席不能预订
+        if train_info['canWebBuy'] != 'Y' or not can_buy_seat(train_info, get_value('config_dict')['seatType']):
             continue
 
         print('---get_selected_train_info---')
