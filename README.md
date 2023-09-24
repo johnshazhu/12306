@@ -1,9 +1,11 @@
 # 12306
 # 坐席类别
+    # 特等座 P 选座只有A、C、F
     # 商务座 9 选座只有A、C、F
     # 一等座 M 选座为A、C、D、F
     # 二等座 O 选座为A、B、C、D、F（不是0，是大写的字母偶）
 
+    # 高级动卧 A
     # 高级软卧 6 不能选铺位
     # 一等卧 I 不能选铺位
     # 动卧 F 下铺 上铺
@@ -18,23 +20,24 @@
 ```
 username=12306账号
 password=12306密码
-trainCode=订票车次（可多个车次，优先匹配前面的）
-seatType=席别（上面坐席类别说明中的11种）
+trainCode=订票车次（可多个车次，多个车次以英文逗号隔开，优先匹配前面的）
+seatType=席别（上面坐席类别说明中）
 date=车次日期，格式为yyyy-MM-dd，例如 2023-09-19）
 from=出发站
 to=到达站
-passengers=乘客（可多个，名字以,隔开）
+passengers=乘客（可多个，名字以英文逗号隔开）
 castNum=登录用户的身份证的后4位，获取短信验证码用
 chooseSeats=选择动车/高铁坐席（高铁坐席一般为A、B、C, D、F，一人的话可以设置1F，1A等，两人的话为1D1F，或1F2F）
 seatDetailType=卧铺（100为1个下铺，200为两个下铺，依次类推。101为1个下铺和上铺，211为2个下铺，一个中铺，一个上铺）
 purpose_codes=（ADULT: 成人，0x00: 学生）
-timesBetweenTwoQuery=两次查询的时间间隔（单位为秒），设置后自动查询余票
+timesBetweenTwoQuery=两次查询的时间间隔（单位为秒），设置后自动查询余票（候补下单设置时默认会取消自动查询）
+candidate=1（1为候补下单）
 ```
-配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg扫描登录后，自动购票。  
+配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg，手机12306 app扫码登录后，可自动购票。  
 
 或执行login.py，通过账号密码方式自动登录后购票。
 
-暂只支持单程票，不支持候补下单。
+暂只支持单程票。
 
 [//]: # (查询余票时，学生票purpose_codes为0x00，成人为ADULT)
 

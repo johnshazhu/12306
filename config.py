@@ -37,11 +37,11 @@ def init_config():
 
     config_dict = {}
 
-    seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O']
-    can_choose_seats_type = ['9', 'M', 'O']
+    seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O', 'P']
+    can_choose_seats_type = ['9', 'M', 'O', 'P']
     can_choose_seat_detail_type = ['3', '4', 'F']
     other_seats_type = ['1', '2', '6', 'I', 'J']
-    keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType'
+    keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType, trainCode, candidate'
     config_check_pass = True
     with open('config.properties', 'r') as f:
         for line in f.readlines():

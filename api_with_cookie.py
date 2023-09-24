@@ -53,6 +53,8 @@ def update_cookie(url, post_data=None, other=None, post_method=True):
                 sub_items = cookie_item.split(', ')
                 for child in sub_items:
                     item_key = child.split('=')[0]
+                    if len(child.split('=')) < 2:
+                        continue
                     item_value = child.split('=')[1]
                     if item_key.lower() == 'path':
                         continue

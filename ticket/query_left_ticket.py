@@ -33,6 +33,26 @@ class TicketResult:
         )
 
 
+def get_dj_by_seat(seat_type):
+    seat_type_map = {
+        '9': 'SWZ',
+        'M': 'ZY',
+        'O': 'ZE',
+
+        '6': 'GR',
+        'I': 'RW',
+        'F': 'SRRB',
+        'J': 'YW',
+
+        '1': 'YZ',
+        '2': 'RZ',
+        '3': 'YW',
+        '4': 'RW',
+        'A': 'YYRW',
+        'P': 'TZ'
+    }
+    return seat_type_map[seat_type]
+
 def get_detail(result, data_map):
     keys = [
         'train_no',
@@ -69,6 +89,7 @@ def get_detail(result, data_map):
         'rw_num',
         # 软座
         'rz_num',
+        # 特等座?
         'tz_num',
         # 无座
         'wz_num',
@@ -102,18 +123,23 @@ def get_detail(result, data_map):
     result_list = []
     for item in result:
         contents = item.split('|')
-
+        start = 0
+        secret_str = contents[start]
+        start += 1
+        button_text_info = contents[start]
+        start += 1
         child = {
-            'secretStr': contents[0],
-            'buttonTextInfo': contents[1],
+            'secretStr': secret_str,
+            'buttonTextInfo': button_text_info,
             'queryLeftNewDTO': {
 
             }
         }
-        start = 2
         i = 0
+        num_start = keys.index('gg_num')
+        num_end = keys.index('srrb_num')
         while i < len(keys):
-            if 34 > start + i > 19:
+            if num_end >= i >= num_start:
                 child['queryLeftNewDTO'][keys[i]] = contents[start + i]
             else:
                 child['queryLeftNewDTO'][keys[i]] = contents[start + i]
@@ -131,6 +157,7 @@ def can_buy_seat(detail, seat_type):
         '9': 'swz_num',
         'M': 'zy_num',
         'O': 'ze_num',
+        'P': 'tz_num',
 
         '6': 'gr_num',
         'I': 'rw_num',
