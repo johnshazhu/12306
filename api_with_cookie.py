@@ -48,17 +48,25 @@ def update_cookie(url, post_data=None, other=None, post_method=True):
         session_set_cookie = session_rsp.headers.get('Set-Cookie')
         cookie = get_value('cookie')
         if session_set_cookie is not None:
+            # Path=,; route=/cfg
+            # Path=/abc, route=/cfg; cmd=test
+            # Expire=Thu, 1970
             cookie_items = session_set_cookie.split('; ')
             for cookie_item in cookie_items:
-                sub_items = cookie_item.split(', ')
-                for child in sub_items:
-                    item_key = child.split('=')[0]
-                    if len(child.split('=')) < 2:
-                        continue
-                    item_value = child.split('=')[1]
-                    if item_key.lower() == 'path':
-                        continue
-                    else:
+                equals_count = cookie_item.count('=')
+                if equals_count > 1:
+                    sub_items = cookie_item.split(', ')
+                    for child in sub_items:
+                        item_key = child.split('=')[0]
+                        item_value = child.split('=')[1]
+                        if item_key.lower() == 'path':
+                            continue
+                        else:
+                            cookie[item_key] = item_value
+                else:
+                    item_key = cookie_item.split('=')[0]
+                    if item_key.lower() != 'path':
+                        item_value = cookie_item.split('=')[1]
                         cookie[item_key] = item_value
         set_value('cookie', cookie)
         # if (post_method or session.headers['Content-Type'].find('application/json') > -1) and is_not_html_content(session_rsp):
