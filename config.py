@@ -40,6 +40,7 @@ def init_config():
     seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O']
     can_choose_seats_type = ['9', 'M', 'O']
     can_choose_seat_detail_type = ['3', '4', 'F']
+    other_seats_type = ['1', '2', '6', 'I', 'J']
     keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType'
     config_check_pass = True
     with open('config.properties', 'r') as f:
@@ -58,6 +59,11 @@ def init_config():
     if config_check_pass and not is_value_exist(config_dict['seatType'], seats):
         config_check_pass = False
         print(f'seatType的值应该在{seats}中')
+
+    # 是否是不可选座类型
+    if config_check_pass and is_value_exist(config_dict['seatType'], other_seats_type):
+        config_dict['seatDetailType'] = '000'
+        config_dict['chooseSeats'] = ''
 
     # 检查是动车/高铁坐席
     if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seats_type):
