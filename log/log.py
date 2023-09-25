@@ -9,7 +9,6 @@ def init_log(save_log):
     global file
     if save_log:
         file = open('log/' + log_file_name(), 'wb')
-        file.write("ignore this err...'O' is not in list".encode())
 
 def log(msg):
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
