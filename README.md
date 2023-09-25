@@ -32,6 +32,7 @@ seatDetailType=卧铺（100为1个下铺，200为两个下铺，依次类推。1
 purpose_codes=（ADULT: 成人，0x00: 学生）
 timesBetweenTwoQuery=两次查询的时间间隔（单位为秒），设置后自动查询余票（候补下单设置时默认会取消自动查询）
 candidate=1（1为候补下单）
+aftertime=12:00（只看几点以后的车次，仅当未设置订票车次时生效）
 ```
 配置config.properties后，执行qr.py，resource目录下打开qr_image.jpg，手机12306 app扫码登录后，可自动购票。  
 

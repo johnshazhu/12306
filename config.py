@@ -3,6 +3,7 @@ import json
 import api_with_cookie
 import global_var
 from js.js_util import exec_js
+from log.log import init_log, log
 from station import init_station_names
 
 from global_var import set_value
@@ -37,6 +38,8 @@ def init_config():
 
     config_dict = {}
 
+    init_log(False)
+
     seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O', 'P']
     can_choose_seats_type = ['9', 'M', 'O', 'P']
     can_choose_seat_detail_type = ['3', '4', 'F']
@@ -53,12 +56,12 @@ def init_config():
             if len(config_dict[key]) == 0:
                 if keys_check_ignore.find(key) == -1:
                     config_check_pass = False
-                    print(f'请在config.properties中配置{key}的值=xxx')
+                    log(f'请在config.properties中配置{key}的值=xxx')
 
     # 检查坐席设置是否正常
     if config_check_pass and not is_value_exist(config_dict['seatType'], seats):
         config_check_pass = False
-        print(f'seatType的值应该在{seats}中')
+        log(f'seatType的值应该在{seats}中')
 
     # 是否是不可选座类型
     if config_check_pass and is_value_exist(config_dict['seatType'], other_seats_type):
@@ -71,7 +74,7 @@ def init_config():
         config_dict['seatDetailType'] = '000'
         if len(config_dict['chooseSeats']) == 0:
             config_check_pass = False
-            print('请在config.properties中配置chooseSeats的值')
+            log('请在config.properties中配置chooseSeats的值')
 
     # 检查是否是卧铺类坐席
     if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seat_detail_type):
@@ -79,7 +82,7 @@ def init_config():
         config_dict['chooseSeats'] = ''
         if len(config_dict['seatDetailType']) == 0:
             config_check_pass = False
-            print('请在config.properties中配置seatDetailType的值')
+            log('请在config.properties中配置seatDetailType的值')
 
     if config_check_pass:
         set_value('config_dict', config_dict)
@@ -95,7 +98,7 @@ def init_config():
         config_content = json.dumps(config_dict)
         config_obj = json.loads(config_content, object_hook=Config.object_hook)
         config_obj.password = get_encrypt_content(config_obj.password)
-        print('username = ' + config_obj.username)
+        log('username = ' + config_obj.username)
         set_value('config_obj', config_obj)
     return config_check_pass
 
@@ -105,7 +108,7 @@ def is_value_exist(value, value_list):
         index = value_list.index(value)
         return index >= 0
     except Exception as err:
-        print(f'ignore this err...{err}')
+        log(f'ignore this err...{err}')
     return False
 
 def get_station_code(name, station_name_list):

@@ -1,7 +1,10 @@
+import json
+
 import handle_sms_code
 import notification_util
 from api_with_cookie import update_cookie
 from global_var import set_value, get_value
+from log.log import log
 from util import is_success
 
 def user_login():
@@ -27,7 +30,7 @@ def uamauthclient(new_app_tk):
     })
 
 def web_auth_uamtk_static():
-    print('查看是否已登录')
+    log('查看是否已登录')
     return update_cookie('https://kyfw.12306.cn/passport/web/auth/uamtk-static', post_data={
             'appid': 'otn'
         }, other={
@@ -38,7 +41,7 @@ def conf():
     return update_cookie('https://kyfw.12306.cn/index/otn/login/conf')
 
 def get_login_config():
-    print('获取登录配置')
+    log('获取登录配置')
     rsp = update_cookie('https://kyfw.12306.cn/otn/login/conf')
     if is_success(rsp):
         data = rsp['data']
@@ -53,17 +56,17 @@ def check_verify():
     if rsp['login_check_code'] == '0':
         process_start_from_login()
     elif rsp['login_check_code'] == '2':
-        print('滑块方式验证暂不支持')
+        log('滑块方式验证暂不支持')
     elif rsp['login_check_code'] == '3':
-        print('短信验证码方式验证')
+        log('短信验证码方式验证')
         rsp = get_sms_code()
         if is_success(rsp):
             notification_util.show_notification('短信验证码', '请注意查看短信验证码并输入')
             handle_sms_code.input_sms_code(submit_sms_code_callback)
         else:
-            print(rsp['result_message'])
+            log(rsp['result_message'])
     else:
-        print(rsp)
+        log(json.dumps(rsp))
 
 def check_login_verify():
     return update_cookie('https://kyfw.12306.cn/passport/web/checkLoginVerify', post_data={
@@ -77,7 +80,7 @@ def check_login_verify():
     })
 
 def get_sms_code():
-    print('获取短信验证码')
+    log('获取短信验证码')
     url = 'https://kyfw.12306.cn/passport/web/getMessageCode'
     check_data = {
         'username': get_value('config_obj').username,
@@ -103,6 +106,7 @@ def submit_sms_code_callback():
 
 
 def to_user_auth_center():
+    log('to_user_auth_center --- 用户中心统一认证')
     rsp = uamtk()
     if is_success(rsp):
         tk = rsp['newapptk']
@@ -111,19 +115,26 @@ def to_user_auth_center():
         rsp = uamauthclient(tk)
         if is_success(rsp):
             user_login()
+            log('user_login --- 更新cookie uKey')
             rsp = conf()
+            log('conf --- 获取配置信息，is_login = ' + rsp['data']['is_login'])
             set_value('can_go_next', is_success(rsp) and rsp['data']['is_login'] == 'Y')
             return rsp
+        else:
+            log('uamauthclient : ' +  rsp['result_message'] + ', result_code = ' + str(rsp['result_code']))
+    else:
+        log('uamtk : ' + rsp['result_message'] + ', result_code = ' + str(rsp['result_code']))
+
 
 def process_start_from_login():
-    print('process_start_from_login')
+    log('开始调用web/login接口登录')
     rsp = web_login()
     session = get_value('session')
     if 'isPasswordCopy' in session.headers:
         del session.headers['isPasswordCopy']
         set_value('session', session)
     if rsp['result_code'] == 0:
-        print('跳转otn/login/userLogin')
+        log('跳转otn/login/userLogin')
         rsp = user_login()
         if rsp == 302:
             redirect_user_login()
@@ -133,9 +144,9 @@ def process_start_from_login():
         if is_uam_login:
             to_user_auth_center()
     elif rsp['result_code'] == 101:
-        print('您的密码很久没有修改了，为降低安全风险，请您重新设置密码后再登录')
+        log('您的密码很久没有修改了，为降低安全风险，请您重新设置密码后再登录')
     else:
-        print(rsp['result_message'])
+        log(rsp['result_message'])
 
 def web_login():
     return update_cookie('https://kyfw.12306.cn/passport/web/login', post_data=get_value('config_obj').__dict__, other={

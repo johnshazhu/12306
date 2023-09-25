@@ -1,5 +1,8 @@
+import json
+
 from api_with_cookie import update_cookie
 from global_var import get_value
+from log.log import log
 
 
 def get_passengers(token=None):
@@ -21,3 +24,6 @@ def get_order_passengers(rsp):
             if get_value('config_dict')['passengers'].find(passenger['passenger_name']) != -1:
                 order_passengers.append(passenger)
         return order_passengers
+    else:
+        log('获取乘客列表失败')
+        log(json.dumps(rsp))

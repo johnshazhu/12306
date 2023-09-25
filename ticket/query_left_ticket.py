@@ -1,3 +1,6 @@
+from log.log import log
+
+
 class TicketResultData:
     def __init__(self, result, flag, map):
         self.result = result
@@ -170,5 +173,5 @@ def can_buy_seat(detail, seat_type):
         '4': 'rw_num',
     }
     num = detail[seat_type_filed_map[seat_type]]
-    print(f'can_buy_seat num = {num}')
+    log(f'can_buy_seat num = {num}')
     return num == '有' or (len(num) > 0 and num.isdigit())

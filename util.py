@@ -14,6 +14,8 @@ def get_today_str():
     return datetime.date.today().strftime('%Y-%m-%d')
 
 def is_success(response):
+    if response is None:
+        return False
     if 'result_code' in response:
         return str(response['result_code']) == '0'
     if 'status' in response:

@@ -1,5 +1,7 @@
 import execjs
 
+from log.log import log
+
 
 def exec_js(path, func, *args):
     with open(path, 'r', encoding='UTF-8') as f:
@@ -11,5 +13,5 @@ def exec_js(path, func, *args):
         print(type(err))
         exec_result = err.__getattribute__('doc')
         print(err)
-    print(f'javascript {path} {func} execute result = \n{exec_result}')
+    log(f'javascript {path} {func} execute result = {exec_result}')
     return exec_result

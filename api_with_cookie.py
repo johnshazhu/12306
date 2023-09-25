@@ -2,6 +2,7 @@ import json
 from urllib.parse import urlencode
 
 import requests
+import urllib3
 
 from global_var import set_value, get_value
 
@@ -17,6 +18,7 @@ def get_cookie():
     return temp_cookies_list
 
 def update_cookie(url, post_data=None, other=None, post_method=True):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     session = get_value('session')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
