@@ -164,6 +164,8 @@ def can_buy_seat(detail, seat_type):
 
         '6': 'gr_num',
         'I': 'rw_num',
+        # 动车的高级软卧下单确认页面就是高级动卧
+        'A': 'gr_num',
         'F': 'srrb_num',
         'J': 'yw_num',
 
