@@ -156,7 +156,8 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
 def query_order_wait_time(token):
     url = 'https://kyfw.12306.cn/otn/confirmPassenger/queryOrderWaitTime'
     return update_cookie(url, post_data={
-        'random': exec_js('js/date.js', 'getDatetime'),
+        # 'random': exec_js('js/date.js', 'getDatetime'),
+        'random': int(time.time() * 1000),
         'tourFlag': 'dc',
         '_json_att': '',
         'REPEAT_SUBMIT_TOKEN': token
