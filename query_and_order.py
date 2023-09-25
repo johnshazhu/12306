@@ -285,8 +285,12 @@ def get_passenger_tickets(passenger_list):
 
 def check_is_can_select_seat_or_bed(rsp):
     if rsp['status'] and rsp['data']['submitStatus']:
-        # 是否可选座位或铺位
-        if rsp['data']['canChooseSeats'] == 'Y' or rsp['data']['canChooseBeds'] == 'Y':
+        seat_type = get_value('config_dict')['seatType']
+        if rsp['data']['choose_Seats'].find(seat_type) > -1:
+            # 是否可选座位或铺位
+            if rsp['data']['canChooseSeats'] == 'Y' or rsp['data']['canChooseBeds'] == 'Y':
+                return True
+        else:
             return True
     else:
         set_value('ordering', False)
@@ -402,7 +406,7 @@ def process_from_query_start():
                 log('检查订单信息')
                 rsp = check_order_info(passenger_list, token)
                 if check_is_can_select_seat_or_bed(rsp):
-                    log('可选择坐席，开始查看排队数')
+                    log('开始查看排队数')
                     selected_train_info = detail['queryLeftNewDTO']
                     rsp = get_queue_count(token, selected_train_info)
                     if check_can_confirm_order(rsp):
