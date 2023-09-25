@@ -7,6 +7,7 @@ from after_nate import candidate_process
 from api_with_cookie import update_cookie
 from global_var import get_value, set_value
 from js.js_util import exec_js
+from log.log import log
 from passenger import get_passengers, get_order_passengers
 from ticket.query_left_ticket import get_detail, can_buy_seat
 from util import get_today_str, is_candidate_config, is_success
@@ -201,7 +202,7 @@ def get_token_from_content(html_content):
         end_index = content.find(';')
         if start_index > -1 and end_index > -1:
             token = content[(start_index + 1):(end_index - 1)]
-            print(f'token = {token}')
+            log(f'token = {token}')
             set_value('token', token)
             return token
 
@@ -214,6 +215,8 @@ def update_cookie_without_uamtk():
 
 def get_selected_train_detail(rsp):
     detail_list = get_detail(rsp['data']['result'], rsp['data']['map'])
+
+    # 是否只看设置的车次
     train_code = get_value('config_dict')['trainCode']
     check_train_code = False
     train_set = None
@@ -221,6 +224,15 @@ def get_selected_train_detail(rsp):
         check_train_code = True
         train_list = train_code.split(',')
         train_set = set(train_list)
+
+    # 是否只看几点以后的车次
+    after_time = get_value('config_dict')['aftertime']
+    check_start_time = False
+    if train_code is not None and len(str(after_time)) > 0:
+        check_start_time = True
+
+    # 只看有对应坐席的车次
+    seat_type = get_value('config_dict')['seatType']
 
     candidate = is_candidate_config()
     candidate_train = None
@@ -234,15 +246,24 @@ def get_selected_train_detail(rsp):
         if not candidate and (train_info['canWebBuy'] != 'Y' or not can_buy_seat(train_info, get_value('config_dict')['seatType'])):
             continue
 
+        # 车次未设置，过滤设置时间以前的车次
+        if not check_train_code and check_start_time and str(train_info['start_time']) < after_time:
+            continue
+
+        # 过滤掉不支持坐席的车次
+        if str(train_info['seat_types']).find(seat_type) == -1:
+            continue
+
+        # 可候补车次
         if candidate and train_info['houbu_train_flag'] == '1' and train_info['houbu_seat_limit'] == '':
-            print('可候补')
-            print(train_info)
+            log('车次' + train_info['station_train_code'] + '可候补，发车时间为 ' + train_info['start_time'] + ', 历时 ' + train_info['lishi'] + '小时')
             candidate_train = detail
             update_cookie_without_uamtk()
             break
 
-        print('---get_selected_train_info---')
-        print(train_info)
+        log('车次' + train_info['station_train_code'] + '可购票，发车时间为 ' + train_info['start_time'] + ', 历时 ' +
+            train_info['lishi'] + '小时')
+        log(json.dumps(train_info))
         update_cookie_without_uamtk()
         return detail
 
@@ -267,22 +288,33 @@ def check_is_can_select_seat_or_bed(rsp):
         # 是否可选座位或铺位
         if rsp['data']['canChooseSeats'] == 'Y' or rsp['data']['canChooseBeds'] == 'Y':
             return True
+    else:
+        set_value('ordering', False)
+        log('checkOrderInfo失败')
+        log(json.dumps(rsp))
     return False
 
 def check_can_confirm_order(rsp):
     if rsp['status']:
-        print('余票 : ' + rsp['data']['ticket'] + ', 排队人数 : ' + rsp['data']['count'])
+        log('余票 : ' + rsp['data']['ticket'] + ', 排队人数 : ' + rsp['data']['count'])
         if rsp['data']['op_2'] != 'false':
-            print('目前排队人数已经超过余票张数，请您选择其他席别或车次')
+            log('目前排队人数已经超过余票张数，请您选择其他席别或车次')
             return False
-        print('---confirm_single_for_queue---')
         return True
+    else:
+        set_value('ordering', False)
+        log('getQueueCount失败')
+        log(json.dumps(rsp))
     return False
 
 def check_wait_time(rsp):
     if rsp['status'] and rsp['data']['submitStatus']:
         if rsp['data']['isAsync'] or rsp['data']['isAsync'] == '1':
             return True
+    else:
+        set_value('ordering', False)
+        log('confirmSingleForQueue失败')
+        log(json.dumps(rsp))
     return False
 
 def need_check_order(rsp):
@@ -297,30 +329,31 @@ def check_order_success(rsp):
 def start_timer_job(token):
     t1 = threading.Thread(target=timer_job, args=(token, 0))
     t2 = threading.Thread(target=delay_timer_job, args=(token,))
-    print("{}".format(int(time.time())) + ' : start_timer_job')
+    log('start_timer_job')
     t1.start()
     t2.start()
     t1.join()
     t2.join()
 
 def delay_timer_job(token):
-    print("{}".format(int(time.time())) + ' : delay_timer_job')
+    log('delay_timer_job')
     timer = threading.Timer(1.0, function=timer_job, args=(token, 1))
     timer.start()
 
 def timer_job(token, index):
     disp_time = get_value('disp_time')
     next_request_time = get_value('next_request_time')
-    print("{}".format(int(time.time())) + ' : execute timer_job index = ' + str(index) + ', disp_time = ' + str(disp_time) + ', next_request_time = ' + str(next_request_time))
+    log('execute timer_job index = ' + str(index) + ', disp_time = ' + str(disp_time) + ', next_request_time = ' + str(next_request_time))
 
     if disp_time <= 0:
         rsp = result_order_for_dc_queue(get_value('orderId'), token)
         if check_order_success(rsp):
             set_value('order_success', True)
-            print('order success, orderId = ' + get_value('orderId'))
+            log('订单确认成功, 订单号 = ' + get_value('orderId') + ', 可到待支付订单中确认支付')
             return True
         else:
-            print('order confirm fail')
+            set_value('ordering', False)
+            log('订单确认失败')
             return False
 
     if disp_time == next_request_time:
@@ -328,6 +361,7 @@ def timer_job(token, index):
         if rsp['status'] and rsp['data']['queryOrderWaitTimeStatus']:
             wait_time = rsp['data']['waitTime']
             if wait_time != -100:
+                log(f'等待时长 = {wait_time} 秒')
                 set_value('disp_time', wait_time)
                 set_value('orderId', rsp['data']['orderId'])
                 d = int(wait_time / 1.5)
@@ -346,6 +380,7 @@ def timer_job(token, index):
         timer_job(token, index + 1)
 
 def process_from_query_start():
+    log('---开始查询---')
     rsp = query_left_tickets()
     if is_success(rsp):
         detail = get_selected_train_detail(rsp)
@@ -354,27 +389,42 @@ def process_from_query_start():
         # if is_success(rsp) and rsp['data']['flag']:
         if detail is None:
             return False
+        log('开始准备提交订单')
+        set_value('ordering', True)
         rsp = submit_order(detail, '')
         if is_success(rsp):
+            log('获取token')
             token = get_repeat_submit_token()
+            log('获取乘客信息列表')
             rsp = get_passengers(token)
             passenger_list = get_order_passengers(rsp)
             if passenger_list is not None and len(passenger_list) > 0:
+                log('检查订单信息')
                 rsp = check_order_info(passenger_list, token)
                 if check_is_can_select_seat_or_bed(rsp):
+                    log('可选择坐席，开始查看排队数')
                     selected_train_info = detail['queryLeftNewDTO']
                     rsp = get_queue_count(token, selected_train_info)
                     if check_can_confirm_order(rsp):
                         # encrypted_data = exec_js('js/suit.js', 'init', get_cookie())
+                        log('确定加入排队队列')
                         rsp = confirm_single_for_queue(token, passenger_list, selected_train_info, '')
                         if check_wait_time(rsp):
                             set_value('disp_time', 1)
                             set_value('next_request_time', 1)
+                            log('等待中...')
                             start_timer_job(token)
                             return True
-                        else:
-                            print('check_wait_time failed')
-                            print(rsp['data'])
+            else:
+                set_value('ordering', False)
+                log('乘客列表信息获取失败')
+                log(json.dumps(rsp))
+        else:
+            set_value('ordering', False)
+            log('submitOrderRequest失败')
+            log(json.dumps(rsp))
+    else:
+        log('余票查询失败 : ' + rsp['messages'])
 
     return False
 
@@ -385,12 +435,20 @@ def start():
     if not is_candidate_config():
         if 'timesBetweenTwoQuery' in config_dict:
             delay_time = float(config_dict['timesBetweenTwoQuery'])
+            log(f'余票自动查询，间隔为 {delay_time} 秒')
 
     if delay_time > 0.3:
         set_value('order_success', False)
+        set_value('ordering', False)
         while not get_value('order_success'):
-            success = process_from_query_start()
-            if not success:
-                time.sleep(delay_time)
+            # 仅未提交订单时开始自动查询
+            if not get_value('ordering'):
+                success = process_from_query_start()
+                if not success:
+                    time.sleep(delay_time)
+            else:
+                # 提交订单中，等待时间延长点
+                time.sleep(2 * delay_time)
     else:
+        log('单次查询开始')
         process_from_query_start()
