@@ -40,11 +40,11 @@ def init_config():
 
     init_log(False)
 
-    seats = ['1', '2', '3', '4', '6', '9', 'F', 'I', 'J', 'M', 'O', 'P']
+    seats = ['1', '2', '3', '4', '6', '9', 'A', 'F', 'I', 'J', 'M', 'O', 'P']
     can_choose_seats_type = ['9', 'M', 'O', 'P']
     can_choose_seat_detail_type = ['3', '4', 'F']
-    other_seats_type = ['1', '2', '6', 'I', 'J']
-    keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType, trainCode, candidate'
+    other_seats_type = ['1', '2', '6', 'A', 'I', 'J']
+    keys_check_ignore = 'timesBetweenTwoQuery, chooseSeats, seatDetailType, trainCode, candidate, aftertime'
     config_check_pass = True
     with open('config.properties', 'r') as f:
         for line in f.readlines():
@@ -58,58 +58,49 @@ def init_config():
                     config_check_pass = False
                     log(f'请在config.properties中配置{key}的值=xxx')
 
+    seat_type = config_dict['seatType']
     # 检查坐席设置是否正常
-    if config_check_pass and not is_value_exist(config_dict['seatType'], seats):
-        config_check_pass = False
-        log(f'seatType的值应该在{seats}中')
-
-    # 是否是不可选座类型
-    if config_check_pass and is_value_exist(config_dict['seatType'], other_seats_type):
-        config_dict['seatDetailType'] = '000'
-        config_dict['chooseSeats'] = ''
-
-    # 检查是动车/高铁坐席
-    if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seats_type):
-        # 动车或高铁时，seatDetailType设置无效，默认为'000'
-        config_dict['seatDetailType'] = '000'
-        if len(config_dict['chooseSeats']) == 0:
-            config_check_pass = False
-            log('请在config.properties中配置chooseSeats的值')
-
-    # 检查是否是卧铺类坐席
-    if config_check_pass and is_value_exist(config_dict['seatType'], can_choose_seat_detail_type):
-        # 卧铺类时，chooseSeats设置无效，默认为''
-        config_dict['chooseSeats'] = ''
-        if len(config_dict['seatDetailType']) == 0:
-            config_check_pass = False
-            log('请在config.properties中配置seatDetailType的值')
-
     if config_check_pass:
-        set_value('config_dict', config_dict)
-        station_name_list = init_station_names()
+        if seat_type not in set(seats):
+            config_check_pass = False
+            log(f'seatType的值应该在{seats}中')
+        elif seat_type in set(other_seats_type):
+            # 是否是不可选座类型
+            config_dict['seatDetailType'] = '000'
+            config_dict['chooseSeats'] = ''
+        elif seat_type in set(can_choose_seats_type):
+            # 检查是动车/高铁坐席
+            # 动车或高铁时，seatDetailType设置无效，默认为'000'
+            config_dict['seatDetailType'] = '000'
+            if len(config_dict['chooseSeats']) == 0:
+                config_check_pass = False
+                log('请在config.properties中配置chooseSeats的值')
+        elif seat_type in set(can_choose_seat_detail_type):
+            # 检查是否是卧铺类坐席
+            # 卧铺类时，chooseSeats设置无效，默认为''
+            config_dict['chooseSeats'] = ''
+            if len(config_dict['seatDetailType']) == 0:
+                config_check_pass = False
+                log('请在config.properties中配置seatDetailType的值')
 
-        if station_name_list is not None:
-            from_station_code = get_station_code(config_dict['from'], station_name_list)
-            to_station_code = get_station_code(config_dict['to'], station_name_list)
-            set_value('from_station_code', from_station_code)
-            set_value('to_station_code', to_station_code)
-            set_value('_jc_save_fromStation', escape(config_dict['from'] + ',' + from_station_code))
-            set_value('_jc_save_toStation', escape(config_dict['to'] + ',' + to_station_code))
-        config_content = json.dumps(config_dict)
-        config_obj = json.loads(config_content, object_hook=Config.object_hook)
-        config_obj.password = get_encrypt_content(config_obj.password)
-        log('username = ' + config_obj.username)
-        set_value('config_obj', config_obj)
+        if config_check_pass:
+            set_value('config_dict', config_dict)
+            station_name_list = init_station_names()
+
+            if station_name_list is not None:
+                from_station_code = get_station_code(config_dict['from'], station_name_list)
+                to_station_code = get_station_code(config_dict['to'], station_name_list)
+                set_value('from_station_code', from_station_code)
+                set_value('to_station_code', to_station_code)
+                set_value('_jc_save_fromStation', escape(config_dict['from'] + ',' + from_station_code))
+                set_value('_jc_save_toStation', escape(config_dict['to'] + ',' + to_station_code))
+            config_content = json.dumps(config_dict)
+            config_obj = json.loads(config_content, object_hook=Config.object_hook)
+            config_obj.password = get_encrypt_content(config_obj.password)
+            log('username = ' + config_obj.username)
+            set_value('config_obj', config_obj)
     return config_check_pass
 
-
-def is_value_exist(value, value_list):
-    try:
-        index = value_list.index(value)
-        return index >= 0
-    except Exception as err:
-        log(f'ignore this err...{err}')
-    return False
 
 def get_station_code(name, station_name_list):
     for station in station_name_list:

@@ -30,6 +30,7 @@ def candidate_process(train_detail):
                     time.sleep(0.3)
                 submit_after_login = True
                 log('账号密码登录成功')
+                break
             else:
                 log('开启二维码登录流程')
                 rsp = qr_login()
