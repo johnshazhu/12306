@@ -115,8 +115,13 @@ def get_detail(result, data_map):
         'exchange_train_flag',
         'houbu_train_flag',
         'houbu_seat_limit',
+        # yp_info_new index 39
         'yp_info_new',
+    ]
+    left_keys = [
+        # dw_flag index 46
         'dw_flag',
+        # stopcheckTime index 48
         'stopcheckTime',
 
         'country_flag',
@@ -147,6 +152,16 @@ def get_detail(result, data_map):
             else:
                 child['queryLeftNewDTO'][keys[i]] = contents[start + i]
             i = i + 1
+
+        i = 0
+        start = 46
+        offset = 0
+        while i < len(left_keys):
+            if i > 0:
+                offset = 1
+            child['queryLeftNewDTO'][left_keys[i]] = contents[start + i + offset]
+            i = i + 1
+
         child['queryLeftNewDTO']['from_station_name'] = data_map[contents[6]],
         child['queryLeftNewDTO']['to_station_name'] = data_map[contents[7]],
 
