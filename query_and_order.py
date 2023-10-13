@@ -115,6 +115,13 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
     cookie['_jc_save_fromDate'] = config_dict['date']
     cookie['_jc_save_toDate'] = get_today_str()
 
+    dw_flag = train_info['dw_flag']
+    split_info = dw_flag.split('#')
+    is_jy = 'N'
+    if len(split_info) > 2 and split_info[2][0:1] == 'Q':
+        log('本次列车有静音车厢，默认将优先选择静音车厢')
+        is_jy = 'Y'
+
     return update_cookie(url, post_data={
         'passengerTicketStr': get_passenger_tickets(confirm_order_passengers),
         'oldPassengerStr': get_old_passengers(confirm_order_passengers),
@@ -126,7 +133,7 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
         # 卧铺席， 2个下铺200，两个中铺020，其他 101（上下铺）
         'seatDetailType': config_dict['seatDetailType'],
         # 静音车厢
-        'is_jy': 'N',
+        'is_jy': is_jy,
         # 残疾人
         'is_cj': 'Y',
         # js 中...window.json_ua.toString()
