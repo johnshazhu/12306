@@ -118,6 +118,8 @@ def to_user_auth_center():
             log('user_login --- 更新cookie uKey')
             rsp = conf()
             log('conf --- 获取配置信息，is_login = ' + rsp['data']['is_login'])
+            if is_success(rsp):
+                set_value('queryUrl', rsp['data']['queryUrl'])
             set_value('can_go_next', is_success(rsp) and rsp['data']['is_login'] == 'Y')
             return rsp
         else:

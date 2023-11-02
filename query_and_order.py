@@ -14,7 +14,8 @@ from util import get_today_str, is_candidate_config, is_success
 
 
 def query_left_tickets():
-    return update_cookie('https://kyfw.12306.cn/otn/leftTicket/queryZ', post_data={
+    query_url = get_value('queryUrl')
+    return update_cookie(f'https://kyfw.12306.cn/otn/{query_url}', post_data={
         'leftTicketDTO.train_date': get_value('config_dict')['date'],
         'leftTicketDTO.from_station': get_value('from_station_code'),
         'leftTicketDTO.to_station': get_value('to_station_code'),
