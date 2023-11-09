@@ -67,7 +67,8 @@ def check_order_info(passengers, token):
         'passengerTicketStr': get_passenger_tickets(passengers),
         'oldPassengerStr': get_old_passengers(passengers),
         'tour_flag': 'dc',
-        'whatsSelect': str(len(passengers)),
+        # '0'表示选择受让人列表中的乘客 '1'表示选择正常乘车人列表中的乘客
+        'whatsSelect': '1',
         'sessionId': '',
         'sig': '',
         'scene': 'nc_login',
@@ -140,7 +141,7 @@ def confirm_single_for_queue(token, confirm_order_passengers, train_info, encryp
         # js 中...window.json_ua.toString()
         # 'encryptedData': get_encrypted_data(),
         'encryptedData': encrypted_data,
-        'whatsSelect': len(confirm_order_passengers),
+        'whatsSelect': '1',
         # 动卧？
         'roomType': '00',
         # 单程往返全选
@@ -423,6 +424,7 @@ def process_from_query_start():
                         log('确定加入排队队列')
                         rsp = confirm_single_for_queue(token, passenger_list, selected_train_info, '')
                         if check_wait_time(rsp):
+                            log_data(token)
                             set_value('disp_time', 1)
                             set_value('next_request_time', 1)
                             log('等待中...')
