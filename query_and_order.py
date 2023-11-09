@@ -424,7 +424,6 @@ def process_from_query_start():
                         log('确定加入排队队列')
                         rsp = confirm_single_for_queue(token, passenger_list, selected_train_info, '')
                         if check_wait_time(rsp):
-                            log_data(token)
                             set_value('disp_time', 1)
                             set_value('next_request_time', 1)
                             log('等待中...')
