@@ -42,7 +42,7 @@ aftertime=12:00（只看几点以后的车次，仅当未设置订票车次时�
 
 [//]: # (查询余票时，学生票purpose_codes为0x00，成人为ADULT)
 
-微信小程序二维码
+微信小程序二维码，可在电脑端小程序上用12306 app扫码登录，或使用12306账号密码登录。
 
 
 ![image](https://github.com/johnshazhu/12306/assets/4417559/bf99a7f0-e049-4306-b5ff-a3d30ac204a0)
