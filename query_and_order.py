@@ -370,11 +370,20 @@ def timer_job(token, index):
             log('订单确认失败')
             return False
 
+    today_can_not_order = get_value('today_can_not_order')
+    if today_can_not_order is not None:
+        return False
+
     if disp_time == next_request_time:
         rsp = query_order_wait_time(token)
         if rsp['status'] and rsp['data']['queryOrderWaitTimeStatus']:
             wait_time = rsp['data']['waitTime']
             if wait_time != -100:
+                if wait_time == -2:
+                    # 当日取消订单次数过多，已并不能再购票
+                    set_value('today_can_not_order', True)
+                    log(rsp['data']['msg'])
+                    return False
                 log(f'等待时长 = {wait_time} 秒')
                 set_value('disp_time', wait_time)
                 set_value('orderId', rsp['data']['orderId'])
@@ -392,6 +401,8 @@ def timer_job(token, index):
     if index > 0:
         time.sleep(1)
         timer_job(token, index + 1)
+
+    return False
 
 def process_from_query_start():
     log('---开始查询---')

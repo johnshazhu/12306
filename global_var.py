@@ -6,6 +6,8 @@ def set_value(key, value):
     global_dict[key] = value
 
 def get_value(key):
-    return global_dict[key]
+    if key in global_dict:
+        return global_dict[key]
+    return None
 
 
