@@ -6,9 +6,11 @@ import urllib3
 
 from global_var import set_value, get_value
 
+
 def init():
     set_value('session', requests.session())
     set_value('cookie', {})
+
 
 def get_cookie():
     temp_cookies_list = ''
@@ -17,11 +19,12 @@ def get_cookie():
     temp_cookies_list = temp_cookies_list[:(len(temp_cookies_list) - 1)]
     return temp_cookies_list
 
+
 def update_cookie(url, post_data=None, other=None, post_method=True):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     session = get_value('session')
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
         'Host': 'kyfw.12306.cn',
     }
     for k in headers.keys():
@@ -65,7 +68,7 @@ def update_cookie(url, post_data=None, other=None, post_method=True):
                             continue
                         else:
                             cookie[item_key] = item_value
-                else:
+                elif len(cookie_item.split('=')) > 1:
                     item_key = cookie_item.split('=')[0]
                     if item_key.lower() != 'path':
                         item_value = cookie_item.split('=')[1]

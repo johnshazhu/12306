@@ -7,19 +7,25 @@ from global_var import set_value, get_value
 from log.log import log
 from util import is_success
 
+
 def user_login():
     return update_cookie('https://kyfw.12306.cn/otn/login/userLogin', post_method=False)
 
+
 def redirect_user_login():
     return update_cookie('https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin', post_method=False)
+
 
 def uamtk():
     return update_cookie('https://kyfw.12306.cn/passport/web/auth/uamtk', post_data={
         'appid': 'otn'
     }, other={
         'Referer': 'https://kyfw.12306.cn/otn/passport?redirect=/otn/login/userLogin',
-        'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept': 'application/json, text/javascript, */*;q=0.01',
+        'Origin': 'https://kyfw.12306.cn'
     })
+
 
 def uamauthclient(new_app_tk):
     return update_cookie('https://kyfw.12306.cn/otn/uamauthclient', post_data={
@@ -29,6 +35,7 @@ def uamauthclient(new_app_tk):
         'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8'
     })
 
+
 def web_auth_uamtk_static():
     log('查看是否已登录')
     return update_cookie('https://kyfw.12306.cn/passport/web/auth/uamtk-static', post_data={
@@ -37,8 +44,10 @@ def web_auth_uamtk_static():
             'Content-Type': 'application/x-www-form-urlencoded'
         })
 
+
 def conf():
     return update_cookie('https://kyfw.12306.cn/index/otn/login/conf')
+
 
 def get_login_config():
     log('获取登录配置')
@@ -50,6 +59,7 @@ def get_login_config():
         set_value('is_login', data['is_login'] == 'Y')
         set_value('queryUrl', data['queryUrl'])
     return rsp
+
 
 def check_verify():
     rsp = check_login_verify()
@@ -68,6 +78,7 @@ def check_verify():
     else:
         log(json.dumps(rsp))
 
+
 def check_login_verify():
     return update_cookie('https://kyfw.12306.cn/passport/web/checkLoginVerify', post_data={
         'username': get_value('config_obj').username,
@@ -78,6 +89,7 @@ def check_login_verify():
         'Origin': 'https://kyfw.12306.cn',
         'Accept': '*/*'
     })
+
 
 def get_sms_code():
     log('获取短信验证码')
@@ -93,6 +105,7 @@ def get_sms_code():
         'Origin': 'https://kyfw.12306.cn',
         'Accept': '*/*'
     })
+
 
 def submit_sms_code_callback():
     sms_code = handle_sms_code.get_sms_code()
@@ -150,6 +163,7 @@ def process_start_from_login():
     else:
         log(rsp['result_message'])
 
+
 def web_login():
     return update_cookie('https://kyfw.12306.cn/passport/web/login', post_data=get_value('config_obj').__dict__, other={
         'isPasswordCopy': 'N',
@@ -157,6 +171,7 @@ def web_login():
         'Content-Type': 'application/x-www-form-urlencoded;application/json;charset=UTF-8',
         'Origin': 'https://kyfw.12306.cn',
     })
+
 
 def check_user():
     url = 'https://kyfw.12306.cn/otn/login/checkUser'

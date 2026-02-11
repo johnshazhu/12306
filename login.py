@@ -1,4 +1,4 @@
-from api_login import get_login_config, web_auth_uamtk_static, check_verify
+from api_login import get_login_config, web_auth_uamtk_static, check_verify, uamtk
 from config import init_config
 from global_var import get_value, set_value
 from log.log import log
@@ -9,6 +9,8 @@ if __name__ == '__main__':
     if init_config():
         rsp = get_login_config()
         if is_success(rsp):
+            rsp = uamtk()
+        if not is_success(rsp):
             rsp = web_auth_uamtk_static()
             is_login = False
             if is_success(rsp):

@@ -27,6 +27,7 @@ def create_qr64():
         log('登录二维码生成失败，code = ' + rsp['result_code'] + ', result_message = ' + rsp['result_message'])
     return None
 
+
 def check_qr(uuid):
     log('二维码扫描检测中...')
     scan_success = False
@@ -50,6 +51,7 @@ def check_qr(uuid):
             break
 
     return scan_success
+
 
 def qr_login():
     uuid = create_qr64()
